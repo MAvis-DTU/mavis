@@ -1,0 +1,50 @@
+#domain
+hospital
+#levelname
+MAPOPstars
+#colors
+red: 0,A
+blue: 1,B
+green: 2,C
+orange: 3,D
+brown: 4,E
+cyan: 5,F
+purple: 6,G,K
+lightblue: 7,H
+pink: 8,I
+grey: 9,J,U
+#initial
+++++++++++++++++++++++++
++     +F+       +U+    +
++  E  +++   H   +++  C +
++ E3E      H6H      C1C+
++  E        H        C +
++                      +
++     + +       + +    +
++  F  + +   I   + +  G +
++ F4F + +  I7I  + + G5G+
++  F  + +   I   + +  G +
++                      +
++                      +
++  B                 D +
++ B0B +++   8   +++ D2D+
++  B  +C+       +K+  D +
+++++++++++++++++++++++++
+#goal
+++++++++++++++++++++++++
++     + +       + +    +
++     +++       +++    +
++                      +
++                      +
++                      +
++     +B+       +C+    +
++     +G+       +B+    +
++     +H+       +D+    +
++     +I+       +F+    +
++                      +
++                      +
++                      +
++     +++       +++    +
++     + +       + +    +
+++++++++++++++++++++++++
+#end

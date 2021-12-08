@@ -1,0 +1,35 @@
+#domain
+hospital
+#levelname
+SAtowersOfHoChiMinh10
+#colors
+blue: 0, A, B, C, D, E, F, G, H, I, J
+#initial
++++++++
++  0  +
++A+ + +
++B+ + +
++C+ + +
++D+ + +
++E+ + +
++F+ + +
++G+ + +
++H+ + +
++I+ + +
++J+ + +
++++++++
+#goal
++++++++
++     +
++ + +A+
++ + +B+
++ + +C+
++ + +D+
++ + +E+
++ + +F+
++ + +G+
++ + +H+
++ + +I+
++ + +J+
++++++++
+#end

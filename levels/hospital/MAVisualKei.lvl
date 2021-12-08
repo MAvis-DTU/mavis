@@ -1,0 +1,62 @@
+#domain
+hospital
+#levelname
+MAVisualKei
+#colors
+green: 0, 1, 5, 6, 8, Q, W, E, R, T, Y, U, I, P, O, A, S, D, F
+cyan: 2, 7, 9, Z, X, C, V
+red: 3, B, N, M, L
+pink: 4, G, H, J, K
+#initial
+++++++++++++++++++++++++++++++++++++++++++++++++++
++OOOOOOOOO++OOOOOOOO++OOOOOOOO++OOOOOOO+OOOOOOOOO+
++0 OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO+
++OOOO++OOOOOOOO++OOOOOOOO++OOOOOOO++OOOOOOOOOOOOO+
++++++++++++++++++++++++++++++++++++++++++++++++OO+
++L K   VJFX S A   CMD  Z   H  N  G B +  5  +OO+OO+
++ZLV  X   D     H   N K JB   AGC FSM +D+ + +OO+OO+
++                                    +A+ + +OO+OO+
++  MC  V  KJFA DHX     L Z   S  N  BJ+W+ + +OO+OO+
++ G  HA   F    Z    BS NKMD  L   VC Z+R+ + +OO+OO+
++                                    +Y+ + +OO+OO+
++ H  X  B     SA    N KFC  GMVLJZ D G+I+ + +OO+OO+
++ L VHGMB ACXS K       DN F        JX+ + + +OO+OO+
++1 2 3 4                             +U+ + +OO+OO+
++                                    +T+ + +OO+OO+
++                                    +E+ + +OO+OO+
+++++++++++++++++++++++++++++++++++++++Q+ + +OO+OO+
++    +YT++R+E++WQ+    ++++++++++++++++S+ + +OOOOO+
++     +DS+AOP+IU+     ++++++++++++++++F+ + +OOOOO+
++++++++    F   +++++++++++++++++++++++++++P+OOOOO+
++      7+ +++ +6  VCXZ++++++++++++++++++++++++++++
+++++++++        +++++++++++++++++++++++++++++ ++++
++     +  +   +  +     +++++++++++++++++++++++ ++++
++    +  ++ + ++  +    ++++++++++++++++++++   8 9Z+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+#goal
+++++++++++++++++++++++++++++++++++++++++++++++++++
++OOOOOOOOO++OOOOOOOO++OOOOOOOO++OOOOOOO+OOOOOOOOO+
++OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO+
++OOOO++OOOOOOOO++OOOOOOOO++OOOOOOO++OOOOOOOOOOOOO+
++++++++++++++++++++++++++++++++++++++++++++++++OO+
++ F MNG    J C  SA    V LKD HX  B Z L+     +OO+OO+
++   DH BNX F KVG ZJL   S  AM    C    + + +P+OO+OO+
++                                    + + +I+OO+OO+
++FN  H  GA        MCVD  J SXK  L ZB  + + +U+OO+OO+
++C  N  LZG  AMX JKFD        H VSB    + + +Y+OO+OO+
++                                    + + +T+OO+OO+
++  BA XF  VSKD  G CJ M    Z      H N + + +R+OO+OO+
++S V          D KX JLMH    NZAGFB C  + + +E+OO+OO+
++                                    + + +W+OO+OO+
++                                    + + +Q+OO+OO+
++                                    + + +A+OO+OO+
+++++++++++++++++++++++++++++++++++++++ + +S+OO+OO+
++    +  ++ + ++  +    ++++++++++++++++ + +D+OOOOO+
++     +  +   +  +     ++++++++++++++++ + +F+OOOO +
++++++++        +++++++++++++++++++++++++++ +OOOO0+
++ZXCV   + +++ +       ++++++++++++++++++++++++++++
+++++++++   F    +++++++++++++++++++++++++++++ ++++
++     +UI+POA+SD+     +++++++++++++++++++++++ ++++
++    +QW++E+R++TY+    ++++++++++++++++++++Z      +
+++++++++++++++++++++++++++++++++++++++++++++++++++
+#end

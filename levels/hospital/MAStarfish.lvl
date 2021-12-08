@@ -1,0 +1,22 @@
+#domain
+hospital
+#levelname
+MAStarfish
+#colors
+red: 0, A
+green: 1, B
+blue: 2, C, D
+pink: 3
+#initial
+++++++++++++
++0 A       +
++1  B      +
++23CADDAB  +
+++++++++++++
+#goal
+++++++++++++
++A        A+
++         B+
++DD AB    C+
+++++++++++++
+#end

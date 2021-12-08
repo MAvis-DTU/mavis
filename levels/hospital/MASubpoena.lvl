@@ -1,0 +1,116 @@
+#domain
+hospital
+#levelname
+MASubpoena
+#colors
+red: 1, A, B, C
+blue: 2, 6, 7, 8, T, S, H, F
+green: 9, Z, E, N, O
+purple: Y
+cyan: X
+orange: 0, W, G, D, I
+grey: 3, 4, Q, L, R
+lightblue: 5, M, J
+#initial
+++++++++++++++++++++++++++++++++++++++++++++++++++
++1                        867         AYW        +
++ZZZZZZZZZZZZZZZZZ Z ZZ ZZZZZZZZZZZ ZZZY         +
++ Z             ZZ ZZZZZZZ         ZZZZY         +
++ WWWWWWWWWWWWW WWW        WWWWWWW2WMJMY         +
++             Z     ZZZZZZ    ZZZZ ZJMJY         +
++ WWWWWWW W W WWW W WWWWWWWWW WWWW W   Y++++++++ +
++ Z     Z Z Z     Z     Z     ZZZZ Z   Y9+   +   +
++ WWW W W W WWWWWWWWWWW W WWW WWWW W   YE+ + +   +
++   Z Z Z   Z     Z     Z   Z ZZZZ Z   Y0+ + +   +
++ W W WWWWWWW WWW W WWWWWWW W WWWW W5  YG+ +     +
++ Z Z Z   Z   Z Z Z Z     Z Z ZZ   Z   Y + + +D  +
++WW W W W W WWW W W W WWWWW W WWWW W   Y +++ +++++
++   Z   Z   Z   Z Z Z Z     Z ZZZ  Z   Y         +
++ WWWWWWW WWW W W W W W WWWWW WWWW W   Y++++     +
++       Z     Z Z Z Z3L Z Z   ZZZZ Z   Y         +
++ WWWWW WWWWWWW W W W WWW W WWWWWW W   Y         +
++ Z   Z       Z Z   Z     Z   ZZZZ Z   Y         +
++WW W WWWWWWW W WWWWWWWWW WWW WCC  W   Y         +
++   Z         Z Z   Z  QZ Z   ZHT  Z   Y         +
++WWWWWWWWWWWW W W W W WWW W WWWSF  W   Y         +
++     Z       Z   Z Z     Z   Z    Z   Y         +
++ WWW W WWWWW W WWW W WWWWWWW WWWWWW   Y       I +
++ Z   Z   Z   Z Z   Z Z       ZWWW     YYYYY YYYY+
++ W WWWWW W WWW W WWWWW WWWWW WWWW Z   YYYYY YYYY+
++ Z       Z     Z Z     Z   Z ZWWW Z   YYYYY YYYY+
++ W WWWWWWWWWWWWW W WWWWW WWW WWW  Z   XXXXX XXXX+
++ Z Z           Z Z   Z Z     ZWW ZZ   XXXXX XXXX+
++ WWW WWWWWWWWW W WWW W W WWWWWWW ZZ   XXXXX XXXX+
++     Z       Z Z   Z Z   Z   ZWW ZZ   X         +
++ WWWWW WWWWWWW WWW W W WWWWW WWW ZZ   X         +
++             Z   ZZZ Z Z     ZWW ZZ   X    O    +
++WWWWWWWWWW   WWW W WWW WWW W WWW ZZZZZX         +
++                     Z     Z ZWW      X         +
++ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZX         +
++                                      X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X N       +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ Z4X         +
++ Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z Z ZZ ZQX         +
++ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZX         +
++                                      X       Z +
+++++++++++++++++++++++++++++++++++++++++++++++++++
+#goal
+++++++++++++++++++++++++++++++++++++++++++++++++++
++                                               G+
++                                  A             +
++                                                +
++                                                +
++                                                +
++                                       ++++++++ +
++                                        +   +   +
++                                        + + +   +
++                                        + + +   +
++                                        + +     +
++                        L               + + +   +
++                                        +++ +++++
++                                                +
++                                       ++++     +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                    Q                           +
++                                                +
++                                           W    +
++                                           Z    +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++TSHF                               MJM          +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                                +
++                                     Q         E+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+#end

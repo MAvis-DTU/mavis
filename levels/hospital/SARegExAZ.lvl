@@ -1,0 +1,23 @@
+#domain
+hospital
+#levelname
+SARegExAZ
+#colors
+red: C, 0, B, A, D, E, F, G
+#initial
+++++++++++++++
++0    DD +EFG+
++E+ + ++     +
++A+ + ++ +++ +
++B+ +  D +   +
++C+ ++++++++++
+++++++ 
+#goal
+++++++++++++++
++       D+   +
++ +E+ ++     +
++ +A+ ++ +++ +
++ +B+   D+GFE+
++ +C++++++++++
+++++++  
+#end

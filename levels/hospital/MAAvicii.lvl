@@ -1,0 +1,29 @@
+#domain
+hospital
+#levelname
+MAAvicii
+#colors
+cyan: 0, A
+green: 1, B
+grey: C
+#initial
+++++++++++++++++++++++++++++++++++++++++
++CCCCCCCCACCCACCCACCBCCCBABCCACCBCCCCCC+
++CCCCCCCBCBCCCBCBCCCACCBCCCCCBCCACCCCCC+
++CCCCCCACCCACCCACCCCACCCBABCCBCCACCCCCC+
+++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++
++BABABABABABABA  +0A  +  BABABABABABABA+
++ABABABABABABAB  +1B  +  ABABABABABABAB+
+++++++++++++++++++++++++++++++++++++++++
+#goal
+++++++++++++++++++++++++++++++++++++++++
++CCCCCCCCACCCACCCACCBCCCBABCCACCBCCCCCC+
++CCCCCCCBCBCCCBCBCCCACCBCCCCCBCCACCCCCC+
++CCCCCCACCCACCCACCCCACCCBABCCBCCACCCCCC+
+++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++
++BABABABABABABA  +   B+  BABABABABABABA+
++ABABABABABABAB  +   A+  ABABABABABABAB+
+++++++++++++++++++++++++++++++++++++++++
+#end

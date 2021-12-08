@@ -1,0 +1,25 @@
+#domain
+hospital
+#levelname
+SAtowersOfSaigon5
+#colors
+blue: 0, A, B, C, D, E
+#initial
++++++++
++  0  +
++D+ + +
++B+ + +
++A+ + +
++C+ + +
++E+ + +
++++++++
+#goal
++++++++
++     +
++ + +A+
++ + +B+
++ + +C+
++ + +D+
++ + +E+
++++++++
+#end

@@ -1,0 +1,21 @@
+#domain
+hospital
+#levelname
+SAsokogen16
+#colors
+blue: 0, A
+#initial
++++++++
++     ++
++ AA+  +
++ +0A  +
++   +  +
+++++++++
+#goal
++++++++
++  A  ++
++   +A +
++ +    +
++  A+  +
+++++++++
+#end

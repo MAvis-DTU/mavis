@@ -1,0 +1,31 @@
+#domain
+hospital
+#levelname
+SAboXboXboX
+#colors
+blue: 0, A, B, E, H, P, R, S, U
+#initial
++  +++++  +
+   +P+B+
+   + + +
+++++ + ++++
++H 0     R+
+++++ + ++++
++A       S+
+++++ + ++++
+   + + +
+   +E+U+
++  +++++  +
+#goal
++  +++++  +
+   + + +
+   + + +
+++++ + ++++
++   UBE   +
+++++P+S++++
++   RAH   +
+++++ + ++++
+   + + +
+   + + +
++  +++++  +
+#end

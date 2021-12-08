@@ -1,0 +1,25 @@
+#domain
+hospital
+#levelname
+MAMASA
+#colors
+red: 0, A
+green: 1, B
+blue: 2, C
+#initial
++++++++++
++ 0++ +2+
++ +++ + +
++ A B + +
++ +++ +C+
++ ++1 + +
++++++++++
+#goal
++++++++++
++ 1++A+ +
++ +++ + +
++     + +
++ +++ + +
++B++0 +C+
++++++++++
+#end

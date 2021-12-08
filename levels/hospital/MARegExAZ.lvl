@@ -1,0 +1,36 @@
+#domain
+hospital
+#levelname
+MARegExAZ
+#colors
+blue: A, 0
+red: B, 1
+cyan: C, 2
+purple: D, 3
+orange: F, 4
+pink: G, 5
+grey: H, 6
+lightblue: I, 7
+#initial
+++++++++++++++++++++
++ AA 0  ++ ++      +
++             4 FF +
++ BB 1  ++ ++      +
++             5 GG +
++ CC 2  +   +      +
++        + +  6 HH +
++ DD 3             +
++       ++ ++ 7 II +
+++++++++++++++++++++
+#goal
+++++++++++++++++++++
++F      ++ ++     A+
++F                A+
++G      ++ ++     D+
++G                D+
++H      +   +     C+
++H       + +      C+
++I                B+
++I      ++ ++     B+
+++++++++++++++++++++
+#end

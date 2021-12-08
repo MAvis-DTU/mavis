@@ -1,0 +1,27 @@
+#domain
+hospital
+#levelname
+SAchoice
+#colors
+blue: 0, A
+#initial
++++++++++++++
++         A +
++0          +
++           +
++           +
++           +
++A          +
++++++++++++++
+
+#goal
++++++++++++++
++           +
++          A+
++           +
++           +
++           +
++           +
++++++++++++++
+
+#end

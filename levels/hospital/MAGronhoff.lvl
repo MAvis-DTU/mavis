@@ -1,0 +1,22 @@
+#domain
+hospital
+#levelname
+MAGronhoff
+#colors
+green: 0, M, G
+grey: 1, B, C
+#initial
+++++++++
++0     +
++  MC  +
++  GB  +
++     1+
+++++++++
+#goal
+++++++++
++      +
++  GB  +
++  MC  +
++      +
+++++++++
+#end

@@ -1,0 +1,19 @@
+#domain
+hospital
+#levelname
+SAStarfish
+#colors
+red: 0, A, B,I, C, E, D, M, S
+#initial
+++++++++++++
++MA0  ME   +
++A MA      +
++S IDBC    +
+++++++++++++
+#goal
+++++++++++++
++       BEA+
++       MAC+
++       D  +
+++++++++++++
+#end

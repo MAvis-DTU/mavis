@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="source-copyright" pattern="file[mavis]:src//*" />
+</component>

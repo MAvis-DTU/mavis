@@ -1,0 +1,52 @@
+#domain
+hospital
+#levelname
+MAGruppeTo
+#colors
+red: 0, A
+green: 1, B
+blue: 2, C
+grey: 3, D
+brown: 4, E
+lightblue: 5, F
+pink: 6, G
+orange: 7, H
+cyan: 8, I
+purple: 9, J
+#initial
+++++++++++++++++
++  9753102468  +
++              +
++              +
+++++++ +++++++++
++              +
++ C     +++ D  +
++ B     +++ E  +
++ H     +++ G  +
++ A     +++ F  +
++ E     +++ I  +
++ I     +++ J  +
++ F     +++ A  +
++ G     +++ H  +
++ J     +++ B  +
++ D     +++ C  +
+++++++++++++++++
+#goal
+++++++++++++++++
++              +
++              +
++              +
+++++++ +++++++++
++              +
++C      +++  D +
++B      +++  E +
++H      +++  G +
++A      +++  F +
++E      +++  I +
++I      +++  J +
++F      +++  A +
++G      +++  H +
++J      +++  B +
++D      +++  C +
+++++++++++++++++
+#end

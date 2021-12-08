@@ -1,0 +1,21 @@
+#domain
+hospital
+#levelname
+SAsorting
+#colors
+blue: 0, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+#initial
++++++++++++++++++++++++++++++++++++++++++++++
++THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG+
++   0                                       +
++                                           +
++                                           +
++++++++++++++++++++++++++++++++++++++++++++++
+#goal
++++++++++++++++++++++++++++++++++++++++++++++
++                                           +
++                                           +
++                                           +
++ABCDEEEFGHHIJKLMNOOOOPQRRSTTUUVWXZY        +
++++++++++++++++++++++++++++++++++++++++++++++
+#end

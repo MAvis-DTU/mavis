@@ -1,0 +1,18 @@
+#domain
+hospital
+#levelname
+MAsimple4
+#colors
+blue: 0, A, B
+red: 1, C
+#initial
+++++++
++0ABC++
++1    +
++++++++
+#goal
+++++++
++    ++
++ AB C+
++++++++
+#end

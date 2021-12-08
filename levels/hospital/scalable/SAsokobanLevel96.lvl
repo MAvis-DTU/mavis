@@ -1,0 +1,33 @@
+#domain
+hospital
+#levelname
+SAsokobanLevel96
+#colors
+blue: 0, S
+#initial
+ +++++ ++++++
+ +   +++    +
+ ++ S S +S +S+
+ +  S 0 S  S ++
+ + +  ++ +    +
+ +  ++ S + ++ +
+ ++  S        +
+ + SS +S+    +
+ +   +   +S ++
+ +++++ S    +
+     ++++  ++
+        ++++
+#goal
+ +++++ ++++++
+ +   +++    +
+ ++     +  + +
+ +           ++
+ + +  ++ + SSS+
+ +  ++   + ++S+
+ ++         SS+
+ +    + +S  S+
+ +   +   +  ++
+ +++++      +
+     ++++  ++
+        ++++
+#end

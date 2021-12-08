@@ -1,0 +1,23 @@
+#domain
+hospital
+#levelname
+SAfriendofBFS
+#colors
+blue: 0, A, B, C
+#initial
+++++++++++++++
++            +
++            +
++     0A     +
++     CB     +
++            +
+++++++++++++++
+#goal
+++++++++++++++
++            +
++            +
++       A    +
++    C       +
++      B     +
+++++++++++++++
+#end

@@ -1,0 +1,40 @@
+#domain
+hospital
+#levelname
+MAForThePie
+#colors
+red: 0, A, B, C
+blue: 1, J, I, H
+#initial
++++++++++++++++++
++0      +      1+
++ AAAAA + JJJJJ +
++ A   A + J   J +
++ A C A + J H J +
++ A   A + J   J +
++ AAAAA + JJJJJ +
++       +       +
++       +       +
++  BBB  +  III  +
++  B B  +  I I  +
++  BBB  +  III  +
++       +       +
++       +       +
++++++++++++++++++
+#goal
++++++++++++++++++
++       +       +
++       +       +
++  BBB  +  III  +
++  B B  +  I I  +
++  BBB  +  III  +
++       +       +
++       +       +
++ AAAAA + JJJJJ +
++ A   A + J   J +
++ A C A + J H J +
++ A   A + J   J +
++ AAAAA + JJJJJ +
++       +       +
++++++++++++++++++
+#end

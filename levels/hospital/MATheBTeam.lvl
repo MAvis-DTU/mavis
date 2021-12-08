@@ -1,0 +1,51 @@
+#domain
+hospital
+#levelname
+MATheBTeam
+#colors
+purple: 0, 5, A, B, C, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+red: 1, I
+green: 3, D, E, F
+pink: 2, 8, G, H
+blue: 4, 7, K
+grey: 6
+orange: J
+#initial
++++++++++++++++++++
++  0  +BAC  3     +
++Z+ + +++++   +++++
++Y+ + +EDF  5     +
++X+ + +++++  ++++++
++W+ + +   +   +GH++++++++
++V+ + +  6  +   2 4   I1+
++U+ + ++++++++++++++ ++++
++T+ + +                K+
++S+ + +++++++++++++++++++
++R+ + +7               K+
++Q+ + +JJJJ JJJJJ J J JJ+
++P+ + +J  J     J J   JJ+
++O+ + + J J JJJJJ J J JJ+
++N+ + + J    J G  J J   +
++M+ + + JJJJJJ  JJ   JJ +
++L+ + +        J   J  J8+
++++++++++++++++++++++++++
+#goal
++++++++++++++++++++
++  0  +        BAF+
++ + +Z+++++   +++++
++ + +Y+        EDC+
++ + +X+++++  ++++++
++ + +W+G  +   +  ++++++++
++ + +V+H    +           +
++ + +U++++++++++++++ ++++
++ + +T+K               I+
++ + +S+++++++++++++++++++
++ + +R+                 +
++ + +Q+                 +
++ + +P+ K               +
++ + +O+                 +
++ + +N+                 +
++ + +M+                 +
++ + +L+G                +
++++++++++++++++++++++++++
+#end

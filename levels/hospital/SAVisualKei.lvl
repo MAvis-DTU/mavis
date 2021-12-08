@@ -1,0 +1,68 @@
+#domain
+hospital
+#levelname
+SAVisualKei
+#colors
+green: 0, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, X, Z
+brown: Y 
+#initial
++++++++++++++++++++++++++++++++++
++YVVVVVVVYVYVYVYVYVYVYVYVVVVVVVY+
++VYXXXXXXYXYXYXYXYXYXYXYXXXXXXYI+
++SUYAAAAAYAYAYAYBYBYBYBYBBBBBYAL+
++KEIYBBCCYCYDYDYBYDYDYCYCCBBYVIS+
++SUALYDEEEFYDYDYFYDYDYFEEEDYKEIV+
++ISUALYGGHHHGYFYFYFYGHHHGGYKEIVI+
++SUALKEYHIJJIYGYFYGYIJJIHYIVISUA+
++LYKEIVIYKLMNYMYKYNYNMLKYSUALKEI+
++VYYISUALYOPPYPYLYPYPPOYKEYIVIYS+
++UAYLKEIVIYQRYRYOYQYRQYSUALYKEYI+
++VIYSUALKEIYSSSYUYSSSYVISUAYLKYE+
++VIYYSUALYKEYTTYVYTTYIVISUALYKYE+
++IVIYSUALYKEIYUV VUYVISUALKEYIYV+
++VISYSUAYLKEIVYY0YYISUALKEIVIYYS+
++UALYKEIYVISUY     YALKEIVISYYYU+
++ALKYEIYVISUY   Y   YALKEIVYISYU+
++ALKYYEYIVIY  Y Y Y  YSUALKYEIYV+
++ISUAYYLKEY   Y   Y   YIVISYUAYL+
++KEIVYISUY  Y  Y Y  Y  YALKYEIYV+
++ISUALKEY YY   Y Y   YY YIVISUAL+
++KEIVISY     Y  Y  Y     YUALKEI+
++VISUAY  Y Y Y  Y  Y Y Y  YLKEIV+
++ISUAY   Y    Y Y Y    Y   YLKEI+
++VISY  YY  Y Y     Y Y  YY  YUAL+
++KEY  Y   Y  Y  Y  Y  Y   Y  YIV+
++IY  Y  Y Y  Y     Y  Y Y  Y  YS+
++Y  Y  Y  Y   Y   Y   Y  Y  Y  Y+
++++++++++++++++++++++++++++++++++
+#goal
++++++++++++++++++++++++++++++++++
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++                               +
++             ST UV             +
++            SUV VUS            +
++           ST S T TS           +
++          PQR QRP RQP          +
++         OP NO N NP PO         +
++        K  KLM L MLK  M        +
++       JIHGF IJ JI FGHIJ       +
++      GH H G HG GH H G HG      +
++     EFD DEFD E F EFDE DFE     +
++    CD  BD C BCDCB D CB  DC    +
++   AB BAB AB BA AB BA BAB BA   +
++  XX XX X XX XXXXX XX X XX XX  +
++ VV VV VV VVV VVV VVV VV VV VV +
++++++++++++++++++++++++++++++++++
+#end

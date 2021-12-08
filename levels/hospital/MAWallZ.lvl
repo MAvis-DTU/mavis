@@ -1,0 +1,29 @@
+#domain
+hospital
+#levelname
+MAWallZ
+#colors
+red: 0, A
+purple: 2, D
+cyan: 3, E
+blue: 1, B, C
+pink: F
+#initial
++++++++++++++++
++++++  D   E  +
++++++ FFFF ++++
+++++  FFFF  +++
++B1 C       0A+
++++ +    +  +++
+  +++2++++3++  
+    +++  +++
+#goal
++++++++++++++++
++++++        E+
++++++      ++++
+++++        +++
++      AB     +
++++ +    +  +++
+  +++ ++++D++  
+    +++  +++
+#end

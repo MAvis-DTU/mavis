@@ -1,0 +1,9 @@
+# User-specific IntelliJ files.
+.idea/dictionaries
+.idea/shelf
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/workspace.xml
+
+# Build artifacts.
+out

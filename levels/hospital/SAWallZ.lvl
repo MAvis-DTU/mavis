@@ -1,0 +1,36 @@
+#domain
+hospital
+#levelname
+SAWallZ
+#colors
+red: 0, A, B, C
+blue: D
+#initial
++++++++++++
++DDDDDDDD++
++DA C    D+
++D0  DDDBD+
++DDDDDDD D+
++DDDDDD  D+
++DDDDDD DD+
++DDD    D++
++++D DDD+++
++DDD     D+
+++++DDDD ++
++DDDDDDDD++
++++++++++++
+#goal
++++++++++++
++        ++
++         +
++         +
++         +
++         +
++      C  +
++        ++
++++ B   +++
++         +
+++++    A++
++        ++
++++++++++++
+#end

@@ -1,0 +1,29 @@
+#domain
+hospital
+#levelname
+SAOptimal
+#colors
+blue: 0, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, W, X
+#initial
++++++++++++++++++++++++++++++++++++++++
+++++ +Q               A        P      +
++++  +    K C   F   P    A          N +
+++   +M        F    B         O       +
++    WW  L   J         C  AA  S       +
++    WW    T         E          B     +
+++   +R  H   I  T      D              +
++++  +         X  A    U       R   X  +
+++++ +  Q           G        0      T +
++++++++++++++++++++++++++++++++++++++++
+#goal
++++++++++++++++++++++++++++++++++++++++
+++++M+                                +
++++GN+                                +
+++CHO+                                +
++ADIP                                 +
++BEJQ                                 +
+++FKR+                                +
++++LS+                                +
+++++T+                                +
++++++++++++++++++++++++++++++++++++++++
+#end

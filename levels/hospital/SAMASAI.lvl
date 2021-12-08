@@ -1,0 +1,91 @@
+#domain
+hospital
+#levelname
+SAMASAI
+#colors
+red: 0, A, B, C, E
+#initial
+++++++++++++++++++++++++++++++++++++++++++++++++++
++ 0   B       E   B   E   B   C   B   A          +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B       B       B   C   B       A   +  +
++ +   B   B   B   B   B   B   C       A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B       B       C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B       A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B       B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A       +  +
++ +   B   B   E   B   E   B   C   B   A       +  +
++ +   B   B   E   B   E   B   C   B   A   A   +  +
++ +   B   B   E   B   E   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B       A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B       B       B   C   B       A   +  +
++ +   B   B   B   B   B   B   C       A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B       B       C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B       A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A       +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++ +   B   B   B       B       C   B   A   A   +  +
++ +   B   B   B   B   B   B   C   B   A   A   +  +
++         B       B       B       B   A          +
+++++++++++++++++++++++++++++++++++++++++++++++++++
+#goal
+++++++++++++++++++++++++++++++++++++++++++++++++++
++                                                +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +AA+
++ +                                           +BB+
++ +                                           +EE+
++ +                                           +CC+
++ +                                           +BB+
++ +                                           +CC+
++0+                                           +EE+
++ +                                           +BB+
++ +                                           +AA+
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++ +                                           +  +
++                                                +
+++++++++++++++++++++++++++++++++++++++++++++++++++
+#end

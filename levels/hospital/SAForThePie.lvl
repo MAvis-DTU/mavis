@@ -1,0 +1,47 @@
+#domain
+hospital
+#levelname
+SAForThePie
+#colors
+blue: 0, A, B, C, D, E, F, G, H, I, J, K, L, M, Z
+#initial
+++++++++++++++
++++++A+++ AA +
++++++B+++D++++
++Z        GFE+
+++++  0 C ++++
++            +
+++++   JJJJJ +
++      J   J +
++ L    J H J +
++      J   J +
+++ +   JJJJJ +
+++ +         +
+++ +         +
+++ +M   III  +
+++ ++   I I  +
++   +   III  +
++ K +        +
++   +M       +
+++++++++++++++
+#goal
+++++++++++++++
++++++ +++   D+
++++++ +++ ++++
++ABC         +
+++++M     ++++
++EFG         +
+++++         +
++M      III  +
++       I I  +
++       III  +
+++K+         +
+++ +         +
+++ +   JJJJJ +
+++ +   J   J +
+++L++  J H J +
++   +  J   J +
++   +  JJJJJ +
++   +        +
+++++++++++++++
+#end
