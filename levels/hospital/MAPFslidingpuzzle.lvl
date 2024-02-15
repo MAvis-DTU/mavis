@@ -1,0 +1,19 @@
+#domain
+hospital
+#levelname
+MAPFreorder
+#colors
+blue: 0,1,2,3,4,5,6,7
+#initial
++++++
++743+
++5 6+
++120+
++++++
+#goal
++++++
++012+
++345+
++67 +
++++++
+#end
