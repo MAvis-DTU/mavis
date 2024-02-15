@@ -1,0 +1,49 @@
+#domain
+hospital
+#levelname
+SAWatsOn
+#colors
+blue: 0, A, B, C, D
+#initial
++++++++++++++
++           +
++  DDDDDDD  +
++  D     D  +
++  D BBB D  +
++  D B B D  +
++  D BBB D  +
++  D     D  +
++  DDDDDDD  +
++           +
++           +
++   CCCCC   +
++   C   C   +
++   C A C   +
++   C   C   +
++   CCCCC   +
++           +
++           +
+++++++0++++++
+     +++
+#goal
++++++++++++++
++           +
++           +
++   CCCCC   +
++   C   C   +
++   C A C   +
++   C   C   +
++   CCCCC   +
++           +
++           +
++  DDDDDDD  +
++  D     D  +
++  D BBB D  +
++  D B B D  +
++  D BBB D  +
++  D     D  +
++  DDDDDDD  +
++           +
+++++++ ++++++
+     +++
+#end
