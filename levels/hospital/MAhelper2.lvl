@@ -1,0 +1,20 @@
+#domain
+hospital
+#levelname
+MAhelper2
+#colors
+blue: 0, A
+red: 1, B
+#initial
+++++++++++
++  ++++ A+
++   0B  1+
++  ++++  +
+++++++++++
+#goal
+++++++++++
++  ++++  +
++        +
++  ++++ A+
+++++++++++
+#end
