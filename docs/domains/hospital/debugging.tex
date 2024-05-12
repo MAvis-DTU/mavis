@@ -1,0 +1,129 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+
+\def\mavis{{\itshape MAvis}}
+
+\geometry{
+  includeheadfoot,
+  margin=2cm
+}
+
+\title{Debugging your \mavis\ client}
+\author{Lasse Dissing Hansen and Thomas Bolander}
+
+\begin{document}
+
+\maketitle
+
+Debugging a \mavis\ client is slightly more complicated than the usual ``press Debug in your IDE'' workflow since the server starts the client as a sub-process.
+Trying to start the server from the IDE won't help since this results in the debugger attaching to the server process rather than the client.
+Instead, the server should start the client in a special debug mode which allows us to attach a debugger afterwards.
+There are many ways to accomplish this, e.g., using a wrapper script or named pipes, but we'll focus on remote debugging since it is supported out of the box in most modern toolchains and development environments.
+It's a feature which is intended for scenarios where it is impractical to develop on the same machine as the program runs on, e.g. in embedded or high-performance computing but it is equally useful for this purpose.
+The remote debugging workflow is as follows: 1) Open your client in the IDE, 2) Configure your client program for remote debugging in the IDE, 3) start the server which then starts your client, and 4) attach your debugging to the client where you can then inspect and step through it as usual.
+The exact steps needed depend on what language and development environment you are using, but we'll demonstrate it using Java.
+
+\section{Java}
+First open your client in the IDE. For instance, in IntelliJ this would be by selecting \texttt{File -> Open...} and then choosing the folder with your client source files. If you have been compiling from the command line up till now, make sure to delete your class files first, so that you open a folder with only the source files in your IDE. Compile the project. Navigate to the parent directory of the directory containing the compiled files. For instance, in IntelliJ, this is by default the subdirectory \texttt{out/production} of the directory of your source files.
+%Take note of where the compiled files are placed. Suppose the compiled java class is in \texttt{out/searchclient/SearchClient.class} relative to the path of your source files.
+%Note that if you @@@
+% we have a client consisting of a compiled java class called \texttt{Client.class}.
+Usually, we would run the client as follows, from the parent directory of the directory containing the client source files:
+\begin{verbatim}
+  java -jar server.jar -l levels/SAD1.lvl -c "java searchclient.SearchClient"  -g
+\end{verbatim}
+However, now we are in another directory, so make sure to update the paths:
+\begin{verbatim}
+  java -jar <path-to-server>/server.jar -l <path-to-levels>/SAD1.lvl
+       -c "java searchclient.SearchClient"  -g
+\end{verbatim}
+We can now configure the JVM to start the client in remote debugging mode by adding a couple of parameters to the client option:
+\begin{verbatim}
+  java -jar <path-to-server>/server.jar -l <path-to-levels>/SAD1.lvl
+       -c "java -agentlib:jdwp=transport=dt_socket,server=y,
+       address=8000,quiet=y,suspend=y searchclient.SearchClient" -g
+\end{verbatim}
+This will make the JVM start the program in a paused state and open a debugging server at \texttt{localhost:8000}.
+The next step is to attach your debugger to the paused client. The details will depend on what IDE you are using but in all cases you will need to configure the debugger to attach to a remote program running at \texttt{localhost:8000}.
+As an example we can use the debugger directly from the command line:
+\begin{verbatim}
+  jdb -attach localhost:8000
+\end{verbatim}
+or in your favourite IDE:
+\begin{itemize}
+\item IntelliJ Idea
+\newline
+\url{https://www.jetbrains.com/help/idea/attaching-to-local-process.html#attach-to-local}
+\item Eclipse \newline
+\url{https://techhub.hpe.com/eginfolib/networking/docs/sdn/sdnc2_7/5200-0910prog/content/s_sdnc-debug-with-eclipse.html}
+\end{itemize}
+
+\section{Python}
+The standard Python debugger \texttt{pdb} doesn't support remote debugging out of the box and we will therefore have to rely on third-party libraries to achieve the same effect.
+In the following we'll demonstrate how to setup VS Code with remote debugging using the \texttt{debugpy} library.
+First, install the library using pip (or however you prefer):
+\begin{verbatim}
+  pip install --user debugpy
+\end{verbatim}
+We can then use this library to setup a debug server from within our application, e.g., by adding the following code snippet to the start of your \mavis\ client:
+\begin{verbatim}
+import debugpy
+
+debugpy.listen(("localhost", 1234)) # Open a debugging server at localhost:1234
+debugpy.wait_for_client()           # Wait for the debugger to connect
+debugpy.breakpoint()                # Ensure the program starts paused
+\end{verbatim}
+Next step is then to create a VS Code launch configuration which connects to the debugpy server started by your \mavis\ client.
+One way to do this is to open the text file \texttt{.vscode/launch.json} in your project folder (or create the file if it doesn't exist), and add a new configuration, e.g.,
+\begin{verbatim}
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "MAvis",
+          "type": "python",
+          "request": "attach",
+          "connect": {
+              "host": "localhost",
+              "port": 1234
+          },
+          "pathMappings": [
+              {
+                  "localRoot": "${workspaceFolder}",
+                  "remoteRoot": "."
+              }
+          ],
+          "justMyCode": true
+      }
+  ]
+}
+\end{verbatim}
+The \texttt{pathMappings} property tells the debugger where it can find the source code for your program and the \texttt{justMyCode} property instructs the debugger to not step into library function calls.
+With this added, you should be able to select a "MAvis" configuration in the Run and Debug tab on the VS Code activity bar.
+Starting the debugger is then as simple as 1) Starting the \mavis\ server with your client as usual and 2) press "Start Debugging" in VS Code.
+A similar setup is also possible for PyCharm as described in: \newline \url{https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#remote-debug-config}
+
+\section{Other languages}
+For those of you who aren't using Java or Python, we have compiled a list of links for some of the more common languages and toolchains, but even if your setup is not mentioned here, you should be able to find a guide by simply Googling ``remote debugging \begin{texttt}\$YOUR\_FAVORITE\_LANG\end{texttt}''
+
+%\begin{itemize}
+\paragraph{C, C++, Rust, Zig and a ton of other natively compiled languages}
+    \begin{itemize}
+        \item \textit{LLVM (Windows, OS X and Linux)} \newline \url{https://lldb.llvm.org/use/remote.html}
+        \item \textit{GNU Compiler Collection (Linux)} \newline \url{https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gnat_ugn_unw/Remote-Debugging-using-gdbserver.html}
+        \item \textit{Visual Studio (Windows)} \newline \url{https://learn.microsoft.com/en-us/visualstudio/debugger/remote-debugging-cpp?view=vs-2022}
+    \end{itemize}
+\paragraph{C\# (and probably also F\#)} {\ }
+
+\noindent \newline \url{https://learn.microsoft.com/en-us/visualstudio/debugger/remote-debugging-csharp?view=vs-2022}
+
+\end{document}
+
