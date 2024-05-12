@@ -157,10 +157,10 @@ public class Server
 
         // Load and start client.
         Client client;
-        Timeout timeout = new Timeout();
+
+        Timeout timeout = new Timeout(args.getTimeoutSeconds());
         try {
-            long timeoutNS = args.getTimeoutSeconds() * 1_000_000_000L;
-            client = new Client(domain, args.getClientCommand(), logFileStream, true, timeout, timeoutNS);
+            client = new Client(domain, args.getClientCommand(), logFileStream, true, timeout);
         } catch (Exception e) {
             Server.printError("Could not start client process.");
             Server.printError(e.getMessage());
@@ -269,10 +269,10 @@ public class Server
 
                 // Load and start client.
                 Client client;
-                Timeout timeout = new Timeout();
+
+                Timeout timeout = new Timeout(args.getTimeoutSeconds());
                 try {
-                    long timeoutNS = args.getTimeoutSeconds() * 1_000_000_000L;
-                    client = new Client(domain, args.getClientCommand(), logFileStream, false, timeout, timeoutNS);
+                    client = new Client(domain, args.getClientCommand(), logFileStream, false, timeout);
                 } catch (Exception e) {
                     Server.printError("Could not start client process.");
                     Server.printError(e.getMessage());

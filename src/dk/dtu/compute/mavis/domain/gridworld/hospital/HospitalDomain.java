@@ -79,10 +79,12 @@ public final class HospitalDomain
      */
     private int originLeft, originTop;
     private int width, height;
+    private int canvasWidth, canvasHeight;
     private int cellSize;
     private int cellBoxMargin;
     // Font information to render fitted text in cells.
     private Font baseFont;
+    private Font speechFont;
     private final int[][] agentGlyphCodes = new int[10][1];
     private final int[][] boxGlyphCodes = new int[26][1];
     private final HashMap<FontRenderContext, Float> pointToPixelRatios = new HashMap<>();
@@ -121,7 +123,6 @@ public final class HospitalDomain
 
     @Override
     public void runProtocol(Timeout timeout,
-                            long timeoutNS,
                             BufferedInputStream clientIn,
                             BufferedOutputStream clientOut,
                             OutputStream logOut)
@@ -133,8 +134,7 @@ public final class HospitalDomain
                                                                      StandardCharsets.US_ASCII.newEncoder()));
         var logWriter = new BufferedWriter(new OutputStreamWriter(logOut, StandardCharsets.US_ASCII.newEncoder()));
 
-        // Read client name. 10 seconds timeout.
-        timeout.reset(System.nanoTime(), TimeUnit.SECONDS.toNanos(10));
+        // Read client name
         String clientMsg;
         try {
             Client.printDebug("Waiting for client name.");
@@ -148,9 +148,9 @@ public final class HospitalDomain
             return;
         }
 
-        // Check and reset timeout.
         long startNS = System.nanoTime();
-        if (!timeout.reset(startNS, timeoutNS)) {
+
+        if (timeout.isExpired()) {
             Client.printError("Timed out while waiting for client name.");
             return;
         }
@@ -274,7 +274,15 @@ public final class HospitalDomain
                     Client.printError(clientMsg);
                     continue;
                 }
+
+                String[] agentCallouts = new String[this.stateSequence.numAgents];
                 for (int i = 0; i < jointAction.length; ++i) {
+                    int calloutIndex = actionMsg[i].indexOf("@");
+                    if (calloutIndex >= 0) {
+                        agentCallouts[i] = actionMsg[i].substring(calloutIndex + 1);
+                        actionMsg[i] = actionMsg[i].substring(0, calloutIndex);
+                    }
+
                     jointAction[i] = Action.parse(actionMsg[i]);
                     if (jointAction[i] == null) {
                         Client.printError("Invalid joint action:");
@@ -285,7 +293,7 @@ public final class HospitalDomain
 
                 // Execute action.
                 long actionTime = System.nanoTime() - startNS;
-                boolean[] result = this.stateSequence.execute(jointAction, actionTime);
+                boolean[] result = this.stateSequence.execute(jointAction, agentCallouts, actionTime);
                 ++this.numActions;
 
                 // Write response.
@@ -551,6 +559,34 @@ public final class HospitalDomain
         }
     }
 
+    private int computeAgentPositionTop(State currentState, State nextState, byte agent, double interpolation)
+    {
+        int cTop = this.originTop + currentState.agentRows[agent] * this.cellSize;
+        int nTop = this.originTop + nextState.agentRows[agent] * this.cellSize;
+        return (int) (cTop + (nTop - cTop) * interpolation);
+    }
+
+    private int computeAgentPositionLeft(State currentState, State nextState, byte agent, double interpolation)
+    {
+        int cLeft = this.originLeft + currentState.agentCols[agent] * this.cellSize;
+        int nLeft = this.originLeft + nextState.agentCols[agent] * this.cellSize;
+        return (int) (cLeft + (nLeft - cLeft) * interpolation);
+    }
+
+    private int computeBoxPositionTop(State currentState, State nextState, int box, double interpolation)
+    {
+        int cTop = this.originTop + currentState.boxRows[box] * this.cellSize;
+        int nTop = this.originTop + nextState.boxRows[box] * this.cellSize;
+        return (int) (cTop + (nTop - cTop) * interpolation);
+    }
+
+    private int computeBoxPositionLeft(State currentState, State nextState, int box, double interpolation)
+    {
+        int cLeft = this.originLeft + currentState.boxCols[box] * this.cellSize;
+        int nLeft = this.originLeft + nextState.boxCols[box] * this.cellSize;
+        return (int) (cLeft + (nLeft - cLeft) * interpolation);
+    }
+
     @Override
     public void renderStateTransition(Graphics2D g, int stateID, double interpolation)
     {
@@ -634,19 +670,11 @@ public final class HospitalDomain
                 if (box != -1) {
                     // Push/Pull.
                     // Agent position.
-                    int cTop = this.originTop + currentState.agentRows[agent] * this.cellSize;
-                    int cLeft = this.originLeft + currentState.agentCols[agent] * this.cellSize;
-                    int nTop = this.originTop + nextState.agentRows[agent] * this.cellSize;
-                    int nLeft = this.originLeft + nextState.agentCols[agent] * this.cellSize;
-                    int iTop = (int) (cTop + (nTop - cTop) * interpolation);
-                    int iLeft = (int) (cLeft + (nLeft - cLeft) * interpolation);
+                    int iTop = computeAgentPositionTop(currentState, nextState, agent, interpolation);
+                    int iLeft = computeAgentPositionLeft(currentState, nextState, agent, interpolation);
                     // Box position.
-                    int bcTop = this.originTop + currentState.boxRows[box] * this.cellSize;
-                    int bcLeft = this.originLeft + currentState.boxCols[box] * this.cellSize;
-                    int bnTop = this.originTop + nextState.boxRows[box] * this.cellSize;
-                    int bnLeft = this.originLeft + nextState.boxCols[box] * this.cellSize;
-                    int biTop = (int) (bcTop + (bnTop - bcTop) * interpolation);
-                    int biLeft = (int) (bcLeft + (bnLeft - bcLeft) * interpolation);
+                    int biTop = computeBoxPositionTop(currentState, nextState, box, interpolation);
+                    int biLeft = computeBoxPositionLeft(currentState, nextState, box, interpolation);
 
                     double direction = Math.atan2(biTop - iTop, biLeft - iLeft);
                     this.drawAgentArm(g, this.agentArmPushPull, iTop, iLeft, direction, agent);
@@ -668,49 +696,46 @@ public final class HospitalDomain
             // Draw dynamic boxes.
             for (int dynamicBox = 0; dynamicBox < this.numDynamicBoxes; ++dynamicBox) {
                 int box = this.dynamicBoxes[dynamicBox];
+                int iTop = computeBoxPositionTop(currentState, nextState, box, interpolation);
+                int iLeft = computeBoxPositionLeft(currentState, nextState, box, interpolation);
                 byte letter = this.stateSequence.boxLetters[box];
-                int cTop = this.originTop + currentState.boxRows[box] * this.cellSize;
-                int cLeft = this.originLeft + currentState.boxCols[box] * this.cellSize;
-                int nTop = this.originTop + nextState.boxRows[box] * this.cellSize;
-                int nLeft = this.originLeft + nextState.boxCols[box] * this.cellSize;
-                int iTop = (int) (cTop + (nTop - cTop) * interpolation);
-                int iLeft = (int) (cLeft + (nLeft - cLeft) * interpolation);
                 this.drawBox(g, iTop, iLeft, (char) ('A' + letter), this.stateSequence.boxColors[letter]);
             }
 
             // Draw dynamic agents.
             for (byte dynamicAgent = 0; dynamicAgent < this.numDynamicAgents; ++dynamicAgent) {
                 byte agent = this.dynamicAgents[dynamicAgent];
-                int cTop = this.originTop + currentState.agentRows[agent] * this.cellSize;
-                int cLeft = this.originLeft + currentState.agentCols[agent] * this.cellSize;
-                int nTop = this.originTop + nextState.agentRows[agent] * this.cellSize;
-                int nLeft = this.originLeft + nextState.agentCols[agent] * this.cellSize;
-                int iTop = (int) (cTop + (nTop - cTop) * interpolation);
-                int iLeft = (int) (cLeft + (nLeft - cLeft) * interpolation);
+                int iTop = computeAgentPositionTop(currentState, nextState, agent, interpolation);
+                int iLeft = computeAgentPositionLeft(currentState, nextState, agent, interpolation);
                 this.drawAgent(g, iTop, iLeft, (char) ('0' + agent), agent);
             }
         } else {
             // Draw all boxes.
             for (int box = 0; box < this.stateSequence.numBoxes; ++box) {
+                int iTop = computeBoxPositionTop(currentState, nextState, box, interpolation);
+                int iLeft = computeBoxPositionLeft(currentState, nextState, box, interpolation);
                 byte letter = this.stateSequence.boxLetters[box];
-                int cTop = this.originTop + currentState.boxRows[box] * this.cellSize;
-                int cLeft = this.originLeft + currentState.boxCols[box] * this.cellSize;
-                int nTop = this.originTop + nextState.boxRows[box] * this.cellSize;
-                int nLeft = this.originLeft + nextState.boxCols[box] * this.cellSize;
-                int iTop = (int) (cTop + (nTop - cTop) * interpolation);
-                int iLeft = (int) (cLeft + (nLeft - cLeft) * interpolation);
                 this.drawBox(g, iTop, iLeft, (char) ('A' + letter), this.stateSequence.boxColors[letter]);
             }
 
             // Draw all agents.
             for (byte agent = 0; agent < this.stateSequence.numAgents; ++agent) {
-                int cTop = this.originTop + currentState.agentRows[agent] * this.cellSize;
-                int cLeft = this.originLeft + currentState.agentCols[agent] * this.cellSize;
-                int nTop = this.originTop + nextState.agentRows[agent] * this.cellSize;
-                int nLeft = this.originLeft + nextState.agentCols[agent] * this.cellSize;
-                int iTop = (int) (cTop + (nTop - cTop) * interpolation);
-                int iLeft = (int) (cLeft + (nLeft - cLeft) * interpolation);
+                int iTop = computeAgentPositionTop(currentState, nextState, agent, interpolation);
+                int iLeft = computeAgentPositionLeft(currentState, nextState, agent, interpolation);
                 this.drawAgent(g, iTop, iLeft, (char) ('0' + agent), agent);
+            }
+        }
+
+        // Draw all speech bubbles
+        for (byte agent = 0; agent < this.stateSequence.numAgents; ++agent) {
+            String message = (interpolation == 0.0) ?
+                             currentState.agentCallouts[agent] :
+                             nextState.agentCallouts[agent];
+
+            if (message != null) {
+                int iTop = computeAgentPositionTop(currentState, nextState, agent, interpolation);
+                int iLeft = computeAgentPositionLeft(currentState, nextState, agent, interpolation);
+                drawSpeechBubble(g, iTop, iLeft, message);
             }
         }
     }
@@ -743,6 +768,9 @@ public final class HospitalDomain
     private void calculateRenderSizes(Graphics2D g, int width, int height, int numRows, int numCols)
     {
         this.cellSize = Math.min(width / numCols, height / numRows);
+
+        this.canvasWidth = width;
+        this.canvasHeight = height;
 
         int excessWidth = width - numCols * this.cellSize;
         int excessHeight = height - numRows * this.cellSize;
@@ -809,6 +837,13 @@ public final class HospitalDomain
         this.agentArmPushPull.addPoint(armLength, -armHeight / 2);
         this.agentArmPushPull.addPoint(armLength, armHeight / 2);
         this.agentArmPushPull.addPoint(0, 0);
+
+        // We want to scale the speech bubble font size but in order to avoid it becoming completely unreadable on
+        // large levels, we also define a lower limit beyond which we just use a fixed size.
+        float dynamicSpeechFontSize = cellTextSize / 4.0f;
+        float lowerLimitSpeechFontSize = 12.0f;
+        float speechFontSize = Math.max(dynamicSpeechFontSize, lowerLimitSpeechFontSize);
+        speechFont = this.baseFont.deriveFont(Font.PLAIN, speechFontSize);
     }
 
     private BitSet getSolvedBoxGoals(int stateID)
@@ -884,6 +919,38 @@ public final class HospitalDomain
 
         g.setColor(BOX_AGENT_FONT_COLOR);
         g.drawGlyphVector(this.boxGlyphVectors[letter - 'A'], left, top);
+    }
+
+    private void drawSpeechBubble(Graphics2D g, int top, int left, String message)
+    {
+        g.setFont(speechFont);
+        FontMetrics metrics = g.getFontMetrics();
+        int lineWidth = metrics.stringWidth(message);
+
+        int bubbleWidth = Math.max(Math.max((int) (lineWidth * 1.2f), metrics.charWidth(' ') * 5),
+                                   (int) (this.cellSize * 0.8));
+        int bubbleHeight = Math.max((int) (metrics.getAscent() * 2.5f), this.cellSize / 3);
+
+        // The tail point is the vertex of the speech bubble triangle pointing towards the agent
+        int tailLeft = left + this.cellSize - 2 * this.cellBoxMargin;
+        int tailTop = top + this.cellBoxMargin + this.cellSize / 4 - this.cellBoxMargin;
+
+        // Compute the display bounds which the bubble should exceed
+        int levelBoundLeft = this.canvasWidth - bubbleWidth;
+        int levelBoundTop = bubbleHeight / 2;
+
+        int bubbleLeft = Math.min(tailLeft, levelBoundLeft);
+        int bubbleCenterTop = Math.max(Math.min(tailTop - bubbleHeight, tailTop - this.cellSize / 2), levelBoundTop);
+
+        g.setColor(Color.WHITE);
+        g.fillOval(bubbleLeft, bubbleCenterTop - bubbleHeight / 2, bubbleWidth, bubbleHeight);
+
+        int[] xs = new int[]{tailLeft, bubbleLeft + bubbleWidth / 4, bubbleLeft + bubbleWidth / 2};
+        int[] ys = new int[]{tailTop, bubbleCenterTop, bubbleCenterTop};
+        g.fillPolygon(xs, ys, 3);
+
+        g.setColor(BOX_AGENT_FONT_COLOR);
+        g.drawString(message, bubbleLeft + (bubbleWidth - lineWidth) / 2, bubbleCenterTop + metrics.getDescent());
     }
 
     private void drawAgent(Graphics2D g, int top, int left, char letter, byte agent)

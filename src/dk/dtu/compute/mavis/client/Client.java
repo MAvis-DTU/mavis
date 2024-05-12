@@ -30,7 +30,6 @@ public class Client
     private Thread clientThread;
 
     private final Timeout timeout;
-    private long timeoutNS;
 
     private Domain domain;
 
@@ -57,19 +56,13 @@ public class Client
      * <p>
      * The Client Thread will finally wait for the Protocol Thread to exit and then itself exit.
      */
-    public Client(Domain domain,
-                  String clientCommand,
-                  OutputStream logOut,
-                  boolean closeLogOnExit,
-                  Timeout timeout,
-                  long timeoutNS)
+    public Client(Domain domain, String clientCommand, OutputStream logOut, boolean closeLogOnExit, Timeout timeout)
     throws IOException
     {
         this.domain = domain;
         this.logOut = logOut;
         this.closeLogOnExit = closeLogOnExit;
         this.timeout = timeout;
-        this.timeoutNS = timeoutNS;
 
         // Naïvely tokenize client command.
         ProcessBuilder processBuilder = new ProcessBuilder();
@@ -198,7 +191,7 @@ public class Client
     {
         Client.printDebug("Thread started.");
 
-        this.domain.runProtocol(this.timeout, this.timeoutNS, this.clientIn, this.clientOut, this.logOut);
+        this.domain.runProtocol(this.timeout, this.clientIn, this.clientOut, this.logOut);
 
         // If Domain.runProtocol() forgot to call Timeout.stop(), we call it here (does nothing if already stopped or
         // expired).

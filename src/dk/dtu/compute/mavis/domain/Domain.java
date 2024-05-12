@@ -126,7 +126,6 @@ public interface Domain
      * IMPORTANT: The streams must NOT be closed by the Domain.
      */
     void runProtocol(Timeout timeout,
-                     long timeoutNS,
                      BufferedInputStream clientIn,
                      BufferedOutputStream clientOut,
                      OutputStream logOut);

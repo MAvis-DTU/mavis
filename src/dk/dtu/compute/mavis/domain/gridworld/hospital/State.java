@@ -38,12 +38,19 @@ class State
     short[] agentRows;
     short[] agentCols;
 
-    State(short[] boxRows, short[] boxCols, short[] agentRows, short[] agentCols)
+    /**
+     * Agent callout messages.
+     * Indexed by agent id (0 .. numAgents-1).
+     */
+    String[] agentCallouts;
+
+    State(short[] boxRows, short[] boxCols, short[] agentRows, short[] agentCols, String[] agentCallouts)
     {
         this.boxRows = boxRows;
         this.boxCols = boxCols;
         this.agentRows = agentRows;
         this.agentCols = agentCols;
+        this.agentCallouts = agentCallouts;
     }
 
     State(State copy)
@@ -52,5 +59,6 @@ class State
         this.boxCols = Arrays.copyOf(copy.boxCols, copy.boxCols.length);
         this.agentRows = Arrays.copyOf(copy.agentRows, copy.agentRows.length);
         this.agentCols = Arrays.copyOf(copy.agentCols, copy.agentCols.length);
+        this.agentCallouts = Arrays.copyOf(copy.agentCallouts, copy.agentCallouts.length);
     }
 }

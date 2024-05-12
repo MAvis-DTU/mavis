@@ -37,12 +37,13 @@ public class Timeout
     private long timeoutNS;
 
     /**
-     * Constructs a Timeout object with an infinite timeout period.
+     * Constructs a Timeout with the given timeout period in seconds.
+     * A period of zero seconds indicates an infinite timeout.
      */
-    public Timeout()
+    public Timeout(int timeoutSeconds)
     {
-        this.startNS = 0;
-        this.timeoutNS = 0;
+        this.startNS = System.nanoTime();
+        this.timeoutNS = timeoutSeconds * 1_000_000_000L;
     }
 
     /**
