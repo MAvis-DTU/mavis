@@ -133,7 +133,7 @@ public class Server
             domain.initializeGraphics();
             var gcs = getGraphicsConfigurations(1, args.getScreens());
             var domains = new Domain[]{domain};
-            playbackManager = new PlaybackManager(domains, gcs);
+            playbackManager = new PlaybackManager(domains, gcs, args.getTickRateOverride());
         } else {
             // The domain can discard past states if we don't need to be able to seek states in the GUI.
             domain.allowDiscardingPastStates();
@@ -360,7 +360,7 @@ public class Server
                 domain.initializeGraphics();
             }
             var gcs = getGraphicsConfigurations(domains.length, args.getScreens());
-            playbackManager = new PlaybackManager(domains, gcs);
+            playbackManager = new PlaybackManager(domains, gcs, args.getTickRateOverride());
 
             Server.printDebug("Starting GUI.");
             playbackManager.startGUI(args.getStartFullscreen(),

@@ -136,7 +136,7 @@ public class PlaybackManager
      * <p>
      * Does not have to be called from the EDT.
      */
-    public PlaybackManager(Domain[] domains, GraphicsConfiguration[] gcs)
+    public PlaybackManager(Domain[] domains, GraphicsConfiguration[] gcs, Integer tickRateOverride)
     {
         this.frames = new PlaybackFrame[domains.length];
         this.domains = Arrays.copyOf(domains, domains.length);
@@ -157,7 +157,8 @@ public class PlaybackManager
 
         this.toolkit = Toolkit.getDefaultToolkit();
 
-        int tickRate = PlaybackManager.getMinimumSupportedRefreshRate(gcs);
+        int tickRate = tickRateOverride != null ? tickRateOverride :
+                       PlaybackManager.getMinimumSupportedRefreshRate(gcs);
         Server.printDebug("GUI tick rate: " + tickRate + " Hz.");
         // Note that the actual tick rate may/will be a bit higher due to limited resolution of the tick timer.
 

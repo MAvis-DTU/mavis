@@ -93,6 +93,7 @@ public class ArgumentParser
     private boolean startPlaying = true;
     private boolean startFullscreen = false;
     private boolean startHiddenInterface = false;
+    private Integer tickRateOverride = null;
 
 
     public ArgumentParser(String[] args)
@@ -165,6 +166,21 @@ public class ArgumentParser
 
                 case "-i":
                     this.startHiddenInterface = true;
+                    break;
+
+                case "--tick-rate":
+                    ++i;
+                    if (i >= args.length) {
+                        throw new ArgumentException("Expected another argument after --tick-rate.");
+                    }
+                    try {
+                        this.tickRateOverride = Integer.parseInt(args[i]);
+                    } catch (NumberFormatException e) {
+                        throw new ArgumentException("The argument after --tick-rate must be an integer.");
+                    }
+                    if (this.tickRateOverride < 0) {
+                        throw new ArgumentException("The argument after --tick-rate can not be negative.");
+                    }
                     break;
 
                 // Client options.
@@ -377,6 +393,11 @@ public class ArgumentParser
         return this.startHiddenInterface;
     }
 
+    public Integer getTickRateOverride()
+    {
+        return this.tickRateOverride;
+    }
+
     /**
      * Indicates if the server should print a help message and exit.
      */
@@ -462,6 +483,9 @@ public class ArgumentParser
                     -i
                         Optional. Start the GUI with interface hidden.
                         By default the GUI shows interface elements for navigating playback.
+                    --tick-rate <ticks-per-second>
+                        Optional. Set the GUI tick rate in ticks per second. Each tick renders a new frame (if not paused).
+                        By default the tick rate matches the lowest common denominator of the screens refresh rates.
                     -o <log-file-path>
                         Optional. Writes log file(s) of the client run.
                         If the -l argument is a level file path, then a single log file is written to the given log file path.
@@ -491,6 +515,9 @@ public class ArgumentParser
                     -i
                         Optional. Start the GUI with interface hidden.
                         By default the GUI shows interface elements for navigating playback.
+                    --tick-rate <ticks-per-second>
+                        Optional. Set the GUI tick rate in ticks per second. Each tick renders a new frame (if not paused).
+                        By default the tick rate matches the lowest common denominator of the screens refresh rates.
 
                 Notes on the <screen> arguments:
                     Values for the <screen> arguments are integers in the range 0..(<num-screens> - 1).
