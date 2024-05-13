@@ -20,11 +20,16 @@ import java.util.Random;
 
 public class TestClient
 {
-    final static String[] ACTIONS = {"NoOp", "Move(N)", "Move(S)", "Move(E)", "Move(W)", "Push(N,N)", "Push(N,E)",
-                                     "Push(N,W)", "Push(S,S)", "Push(S,E)", "Push(S,W)", "Push(E,N)", "Push(E,S)",
-                                     "Push(E,E)", "Push(W,N)", "Push(W,S)", "Push(W,W)", "Pull(N,N)", "Pull(N,E)",
-                                     "Pull(N,W)", "Pull(S,S)", "Pull(S,E)", "Pull(S,W)", "Pull(E,N)", "Pull(E,S)",
-                                     "Pull(E,E)", "Pull(W,N)", "Pull(W,S)", "Pull(W,W)"};
+    final static String[] ACTIONS = {"NoOp",
+
+                                     "Move(N)@Moving North", "Move(S)@Moving South", "Move(E)@Moving East",
+                                     "Move(W)@Moving West",
+
+                                     "Push(N,N)", "Push(N,E)", "Push(N,W)", "Push(S,S)", "Push(S,E)", "Push(S,W)",
+                                     "Push(E,N)", "Push(E,S)", "Push(E,E)", "Push(W,N)", "Push(W,S)", "Push(W,W)",
+
+                                     "Pull(N,N)", "Pull(N,E)", "Pull(N,W)", "Pull(S,S)", "Pull(S,E)", "Pull(S,W)",
+                                     "Pull(E,N)", "Pull(E,S)", "Pull(E,E)", "Pull(W,N)", "Pull(W,S)", "Pull(W,W)"};
 
     public static void main(String[] args)
     throws IOException

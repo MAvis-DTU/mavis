@@ -7,3 +7,8 @@
 
 # Build artifacts.
 out
+docs/**/build
+
+# Misc.
+logs
+.DS_Store

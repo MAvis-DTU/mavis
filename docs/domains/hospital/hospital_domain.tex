@@ -94,7 +94,7 @@ Levels of the hospital domain are grid-based environments. Figure~\ref{figu:aiol
 \begin{center}
     \scalebox{1.2}{\showlevel{levels/MAExample}{1.5cm}}
     \hspace{3cm}
-    \raisebox{-18mm}{\includegraphics[width=7cm]{MAexample}}
+    \raisebox{-18mm}{\includegraphics[width=7cm]{MAExample}}
 \end{center}
 \caption{The textual representation of a level (left), and its graphical visualisation (right).}\label{figu:textual}
 \end{figure}
@@ -203,6 +203,15 @@ A move action is represented in the textual form
 
 \subsection{Applicability and inapplicability}
 The applicability of each individual action is specified above. If an agent tries to execute an inapplicable action, it will fail. Failure corresponds to performing a no-op action, i.e.\ doing nothing. So if an agent e.g.\ tries to move into an occupied cell, it will simply stay in the same cell. 
+
+\subsection{Callouts}
+Agents can callout short messages which will be shown in a speech bubble above the agent using the textual representation
+\[
+  \texttt{<action>@<message>}
+\]
+where \texttt{<message>} is the optional message string that will be shown in the speech bubble.
+This feature can used for visualizing agent intentions or debugging purposes.
+Note that the functionality is purely cosmetic and does not affect action execution.
 
 \subsection{Joint actions and conflicts}
 If a level has several agents, these agents can perform simultaneous actions. The actions of the individual agents are assumed to be completely synchronised, hence we consider joint actions, which have the textual representation

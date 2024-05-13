@@ -240,7 +240,7 @@ class StateSequence
         }
 
         var tEnd = System.nanoTime();
-        Server.printDebug(String.format("Parsing time: %.3f ms.", (tEnd - tStart) / 1_000_000_000.0));
+        Server.printDebug(String.format("Parsing time: %.0f ms.", (tEnd - tStart) / 1_000_000.0));
 
         // IMPORTANT: Done to ensure memory visibility of non-volatile variables on other threads after they've read
         //            numStates.
@@ -597,7 +597,8 @@ class StateSequence
         State initialState = new State(Arrays.copyOf(boxRows, numBoxes),
                                        Arrays.copyOf(boxCols, numBoxes),
                                        Arrays.copyOf(agentRows, this.numAgents),
-                                       Arrays.copyOf(agentCols, this.numAgents));
+                                       Arrays.copyOf(agentCols, this.numAgents),
+                                       new String[this.numAgents]);
 
         this.states[0] = initialState;
         this.stateTimes[0] = 0;
@@ -773,10 +774,17 @@ class StateSequence
 
             // Parse and execute joint action.
             String[] actionsStr = split[1].split("\\|");
+            String agentCallouts[] = new String[this.numAgents];
             if (actionsStr.length != this.numAgents) {
                 throw new ParseException("Invalid number of agents in joint action.", levelReader.getLineNumber());
             }
             for (int i = 0; i < jointAction.length; ++i) {
+                int calloutIndex = actionsStr[i].indexOf("@");
+                if (calloutIndex >= 0) {
+                    agentCallouts[i] = actionsStr[i].substring(calloutIndex + 1);
+                    actionsStr[i] = actionsStr[i].substring(0, calloutIndex);
+                }
+
                 jointAction[i] = Action.parse(actionsStr[i]);
                 if (jointAction[i] == null) {
                     throw new ParseException("Invalid joint action.", levelReader.getLineNumber());
@@ -784,7 +792,7 @@ class StateSequence
             }
 
             // Execute action.
-            this.execute(jointAction, actionTime);
+            this.execute(jointAction, agentCallouts, actionTime);
         }
     }
 
@@ -1276,13 +1284,14 @@ class StateSequence
      * Execute a joint action.
      * Returns a boolean array with success for each agent.
      */
-    boolean[] execute(Action[] jointAction, long actionTime)
+    boolean[] execute(Action[] jointAction, String[] agentCallouts, long actionTime)
     {
         // Determine applicable and non-conflicting actions.
         boolean[] applicable = this.isApplicable(jointAction);
 
         // Create new state with applicable and non-conflicting actions.
         State newState = this.apply(jointAction, applicable);
+        newState.agentCallouts = Arrays.copyOf(agentCallouts, agentCallouts.length);
 
         // Update this.states and this.numStates. Grow as necessary.
         if (this.allowDiscardingPastStates) {
