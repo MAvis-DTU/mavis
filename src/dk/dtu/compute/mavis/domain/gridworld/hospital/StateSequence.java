@@ -240,7 +240,7 @@ class StateSequence
         }
 
         var tEnd = System.nanoTime();
-        Server.printDebug(String.format("Parsing time: %.3f ms.", (tEnd - tStart) / 1_000_000_000.0));
+        Server.printDebug(String.format("Parsing time: %.0f ms.", (tEnd - tStart) / 1_000_000.0));
 
         // IMPORTANT: Done to ensure memory visibility of non-volatile variables on other threads after they've read
         //            numStates.
