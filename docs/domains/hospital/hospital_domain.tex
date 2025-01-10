@@ -261,7 +261,10 @@ A \emph{solution} to a level is any sequence of joint actions that when executed
 To simulate the hospital domain, use the \mavis\ server \texttt{server.jar}. The server loads a level and tracks the actual state of the world, and agents interact with the environment by communicating with the server through a client. The client communicates with the server through the standard streams \emph{stdin}, \emph{stdout}, and \emph{stderr}. Clients can thus be implemented in any programming language that can read from and write to these streams.
 
 \begin{table}
-\centering \setlength{\tabcolsep}{1cm} 
+\begin{center}
+\scalebox{0.8}{
+%\centering 
+\setlength{\tabcolsep}{1cm} 
 \begin{tabular}{lcl} 
 \textsc{Server} &    & \textsc{Client}\\ \\
 & 1 & \texttt{ExampleClient}\\
@@ -287,6 +290,8 @@ To simulate the hospital domain, use the \mavis\ server \texttt{server.jar}. The
 & 21 & \texttt{Move(W)}\\
 \texttt{true} & 22 & \\
 \end{tabular}
+}
+\end{center}
 \caption{Example of interaction between server and client.}
 \label{tbl1:protocol_example}
 \end{table}
