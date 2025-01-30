@@ -16,7 +16,7 @@
 
 package dk.dtu.compute.mavis.server;
 
-class ArgumentException
+public class ArgumentException
         extends Exception
 {
     public ArgumentException(String msg)

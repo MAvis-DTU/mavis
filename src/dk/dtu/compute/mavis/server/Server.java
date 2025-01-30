@@ -21,20 +21,28 @@ import dk.dtu.compute.mavis.client.Timeout;
 import dk.dtu.compute.mavis.domain.Domain;
 import dk.dtu.compute.mavis.domain.ParseException;
 import dk.dtu.compute.mavis.gui.PlaybackManager;
+import dk.dtu.compute.mavis.utils.Crypto;
+import dk.dtu.compute.mavis.utils.TeeOutputStream;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.ToIntFunction;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import static dk.dtu.compute.mavis.utils.Crypto.newCipherOutputStream;
 
 public class Server
 {
@@ -79,6 +87,26 @@ public class Server
             case LONG:
                 System.out.println(ArgumentParser.getLongHelp());
                 return;
+        }
+
+        var keyGenCommand = arguments.getKeyGenCommand();
+        if (keyGenCommand != null) {
+            try {
+                Crypto.generateNewRsaKeyPair(keyGenCommand.publicKeyPath(), keyGenCommand.privateKeyPath());
+            } catch (Exception e) {
+                Server.printError("Couldn't generate new RSA key pair: " + e.getMessage());
+            }
+            return;
+        }
+
+        var decryptCommand = arguments.getDecryptCommand();
+        if (decryptCommand != null) {
+            try {
+                runDecryptCommand(decryptCommand);
+            } catch (Exception e) {
+                Server.printError("Couldn't decrypt log archive: " + e.getMessage());
+            }
+            return;
         }
 
         switch (arguments.getServerInputMode()) {
@@ -214,22 +242,46 @@ public class Server
 
         try (var levelDirectory = Files.newDirectoryStream(args.getLevelPath(), levelFileFilter)) {
             // Open log file.
-            OutputStream logFileStream;
             ZipOutputStream logZipStream;
             if (args.hasLogOutput()) {
+                var logFilePath = args.getLogFilePath();
+                OutputStream logFileStream;
                 try {
-                    logZipStream = new ZipOutputStream(new BufferedOutputStream(Files.newOutputStream(args.getLogFilePath(),
-                                                                                                      StandardOpenOption.CREATE_NEW,
-                                                                                                      StandardOpenOption.WRITE)));
-                    logFileStream = logZipStream;
+                    logFileStream = Files.newOutputStream(logFilePath, StandardOpenOption.CREATE_NEW);
                 } catch (IOException e) {
-                    Server.printError("Could not create log file: " + args.getLogFilePath());
+                    Server.printError("Could not create log file: " + logFilePath);
                     Server.printError(e.getMessage());
                     return;
                 }
+
+                // If encryption is enabled, tee the log file content into an encrypted stream as well.
+                if (args.getEncryptPublicKeyPath() != null) {
+                    var encryptedLogFilePath = Path.of(logFilePath + ".out");
+                    if (!Files.notExists(encryptedLogFilePath)) {
+                        Server.printError("The encrypted log file may already exist, or has insufficient access: " +
+                                          encryptedLogFilePath);
+                        return;
+                    }
+
+                    OutputStream encryptedLogFileStream;
+                    try {
+                        encryptedLogFileStream = Files.newOutputStream(encryptedLogFilePath,
+                                                                       StandardOpenOption.CREATE_NEW);
+                        encryptedLogFileStream = newCipherOutputStream(args.getEncryptPublicKeyPath(),
+                                                                       encryptedLogFileStream);
+                    } catch (Exception e) {
+                        Server.printError("Could not create encrypted log file: " + encryptedLogFilePath);
+                        Server.printError(e.getMessage());
+                        return;
+                    }
+                    
+                    logFileStream = new TeeOutputStream(logFileStream, encryptedLogFileStream);
+                }
+
+                logZipStream = new ZipOutputStream(new BufferedOutputStream(logFileStream));
             } else {
-                logFileStream = OutputStream.nullOutputStream();
-                logZipStream = new ZipOutputStream(logFileStream);
+                logZipStream = new ZipOutputStream(OutputStream.nullOutputStream());
+                logZipStream.setLevel(0);
             }
 
             ArrayList<String> levelNames = new ArrayList<>();
@@ -272,7 +324,7 @@ public class Server
 
                 Timeout timeout = new Timeout(args.getTimeoutSeconds());
                 try {
-                    client = new Client(domain, args.getClientCommand(), logFileStream, false, timeout);
+                    client = new Client(domain, args.getClientCommand(), logZipStream, false, timeout);
                 } catch (Exception e) {
                     Server.printError("Could not start client process.");
                     Server.printError(e.getMessage());
@@ -299,7 +351,7 @@ public class Server
             // Write summary to log file.
             try {
                 logZipStream.putNextEntry(new ZipEntry("summary.txt"));
-                BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(logFileStream,
+                BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(logZipStream,
                                                                                      StandardCharsets.US_ASCII.newEncoder()));
                 for (int i = 0; i < levelNames.size(); ++i) {
                     logWriter.write("Level name: ");
@@ -370,6 +422,29 @@ public class Server
             playbackManager.focusPlaybackFrame(0);
 
             playbackManager.waitShutdown();
+        }
+    }
+
+    public static void runDecryptCommand(ArgumentParser.DecryptCommand decryptCommand)
+    throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
+           NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException
+    {
+        if (!Files.exists(decryptCommand.privateKeyPath()) || !Files.isReadable(decryptCommand.privateKeyPath())) {
+            throw new RuntimeException("The private key file may not exist, or has insufficient access.");
+        }
+        if (!Files.exists(decryptCommand.logFilePath()) || !Files.isReadable(decryptCommand.logFilePath())) {
+            throw new RuntimeException("The encrypted log file may not exist, or has insufficient access.");
+        }
+        if (!Files.notExists(decryptCommand.outputFilePath())) {
+            throw new RuntimeException("The output file may already exist, or has insufficient access.");
+        }
+
+        try (var logFileStream = new BufferedInputStream(Files.newInputStream(decryptCommand.logFilePath()));
+             var cipherStream = Crypto.newCipherInputStream(decryptCommand.privateKeyPath(), logFileStream);
+             var outputFileStream = new BufferedOutputStream(Files.newOutputStream(decryptCommand.outputFilePath(),
+                                                                                   StandardOpenOption.CREATE_NEW))) {
+            Server.printInfo("Writing decrypted archive to: " + decryptCommand.outputFilePath());
+            cipherStream.transferTo(outputFileStream);
         }
     }
 
