@@ -22,6 +22,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ArgumentParser
 {
@@ -36,6 +37,21 @@ public class ArgumentParser
     }
 
     private PrintHelp printHelp = PrintHelp.NONE;
+
+    /**
+     * Encryption-related commands.
+     */
+    public record KeyGenCommand(Path publicKeyPath, Path privateKeyPath)
+    {
+    }
+
+    private KeyGenCommand keyGenCommand = null;
+
+    public record DecryptCommand(Path privateKeyPath, Path logFilePath, Path outputFilePath)
+    {
+    }
+
+    private DecryptCommand decryptCommand = null;
 
     /**
      * Input and Output modes.
@@ -79,6 +95,7 @@ public class ArgumentParser
     private Path levelPath = null;
     private int timeoutSeconds = 0;
     private Path logFilePath = null;
+    private Path encryptPublicKeyPath = null;
 
     /**
      * Replay options.
@@ -108,6 +125,34 @@ public class ArgumentParser
                 this.printHelp = PrintHelp.LONG;
                 return;
             }
+        }
+
+        if (args[0].equals("--keygen")) {
+            if (args.length != 2) {
+                throw new ArgumentException("Expected base key file path arguments after --keygen.");
+            }
+            var publicKeyPath = Path.of(args[1] + ".public");
+            var privateKeyPath = Path.of(args[1] + ".private");
+            this.keyGenCommand = new KeyGenCommand(publicKeyPath, privateKeyPath);
+            return;
+        }
+        if (Arrays.asList(args).contains("--keygen")) {
+            throw new ArgumentException("--keygen should be the first argument if used.");
+        }
+
+        if (args[0].equals("--decrypt")) {
+            if (args.length != 4) {
+                throw new ArgumentException("Expected private key file path, encrypted log file path and output file " +
+                                            "path arguments after --decrypt.");
+            }
+            var privateKeyPath = Path.of(args[1]);
+            var logFilePath = Path.of(args[2]);
+            var outputFilePath = Path.of(args[3]);
+            this.decryptCommand = new DecryptCommand(privateKeyPath, logFilePath, outputFilePath);
+            return;
+        }
+        if (Arrays.asList(args).contains("--decrypt")) {
+            throw new ArgumentException("--decrypt should be the first argument if used.");
         }
 
         int i = 0;
@@ -269,6 +314,17 @@ public class ArgumentParser
                     }
                     break;
 
+                case "--encrypt":
+                    ++i;
+                    if (i >= args.length) {
+                        throw new ArgumentException("Expected another argument after --encrypt.");
+                    }
+                    this.encryptPublicKeyPath = Path.of(args[i]);
+                    if (!Files.exists(this.encryptPublicKeyPath) || !Files.isReadable(this.encryptPublicKeyPath)) {
+                        throw new ArgumentException("The public key file may not exist, or has insufficient access.");
+                    }
+                    break;
+
                 // Replay options.
                 case "-r":
                     if (this.serverInputMode == ServerInputMode.CLIENT) {
@@ -357,6 +413,11 @@ public class ArgumentParser
         return this.logFilePath;
     }
 
+    public Path getEncryptPublicKeyPath()
+    {
+        return this.encryptPublicKeyPath;
+    }
+
     /**
      * Replay options.
      */
@@ -406,6 +467,16 @@ public class ArgumentParser
         return this.printHelp;
     }
 
+    public KeyGenCommand getKeyGenCommand()
+    {
+        return this.keyGenCommand;
+    }
+
+    public DecryptCommand getDecryptCommand()
+    {
+        return this.decryptCommand;
+    }
+
     private static String getJarName()
     {
         try {
@@ -425,12 +496,12 @@ public class ArgumentParser
                     java -jar %1$s [-h]
                 Omitting the -h argument shows this abbreviated description.
                 Providing the -h argument shows a detailed description.
-
+                
                 Run a client on a level or a directory of levels, optionally output to GUI and/or log file:
                     java -jar %1$s -c <client-cmd> -l <level-file-or-dir-path> [-t <seconds>]
                               %2$s [-g [<screen>] [-s <ms-per-action>] [-p] [-f] [-i]]
-                              %2$s [-o <log-file-path>]
-
+                              %2$s [-o <log-file-path> [--encrypt <public-key-path>]]
+                
                 Replay one or more log files, optionally output to synchronized GUIs:
                     java -jar %1$s -r <log-file-path> [<log-file-path> ...]
                               %2$s [-g [<screen> ...] [-s <ms-per-action>] [-p] [-f] [-i]]""";
@@ -446,16 +517,16 @@ public class ArgumentParser
                 The server modes are listed below.
                 The order of arguments is irrelevant.
                 Example invocations are given in the end.
-
+                
                 Show help message and exit:
                     java -jar %1$s [-h]
                 Omitting the -h argument shows an abbreviated description.
                 Providing the -h argument shows this detailed description.
-
+                
                 Run a client on a level or a directory of levels, optionally output to GUI and/or log file:
                     java -jar %1$s -c <client-cmd> -l <level-file-or-dir-path> [-t <seconds>]
                               %2$s [-g [<screen>] [-s <ms-per-action>] [-p] [-f] [-i]]
-                              %2$s [-o <log-file-path>]
+                              %2$s [-o <log-file-path> [--encrypt <public-key-path>]]
                 Where the arguments are as follows:
                     -c <client-cmd>
                         Specifies the command the server will use to start the client process, including all client arguments.
@@ -492,7 +563,10 @@ public class ArgumentParser
                         If the -l argument is a level directory path, then logs for the client run on all levels in the
                         level directory are compressed as a zip file written to the given log file path.
                         NB: The log file may *not* already exist (the server does not allow overwriting files).
-
+                    --encrypt <public-key-path>
+                        Optional. Additionally writes an encrypted zip file when the client is run on a directory of levels.
+                        NB: The encrypted zip file may *not* already exist (the server does not allow overwriting files).
+                
                 Replay one or more log files, optionally output to synchronized GUIs:
                     java -jar %1$s -r <log-file-path> [<log-file-path> ...]
                               %2$s [-g [<screen> ...] [-s <ms-per-action>] [-p] [-f] [-i]]
@@ -518,24 +592,24 @@ public class ArgumentParser
                     --tick-rate <ticks-per-second>
                         Optional. Set the GUI tick rate in ticks per second. Each tick renders a new frame (if not paused).
                         By default the tick rate matches the lowest common denominator of the screens refresh rates.
-
+                
                 Notes on the <screen> arguments:
                     Values for the <screen> arguments are integers in the range 0..(<num-screens> - 1).
                     The server attemps to enumerate screens from left-to-right, breaking ties with top-to-bottom.
                     The real underlying screen ordering is system-defined, and the server may fail at enumerating in the above order.
                     If no <screen> argument is given, then the 'default' screen is used, which is a system-defined screen.
-
+                
                     E.g. in a grid aligned 2x2 screen setup, the server will attempt to enumerate the screens as:
                     0: Top-left screen.
                     1: Bottom-left screen.
                     2: Top-right screen.
                     3: Bottom-right screen.
-
+                
                     E.g. in a 1x3 horizontally aligned screen setup, the server will attempt to enumerate the screens as:
                     0: The left-most screen.
                     1: The middle screen.
                     2: The right-most screen.
-
+                
                 You can use the following hotkeys when the server runs with GUI output:
                     <space>      : Toggle play/pause.
                     <left>       : Step back one state. Pauses.
@@ -552,39 +626,42 @@ public class ArgumentParser
                     I            : Toggle interface elements that may spoil results on/off.
                     <ctrl>+Q     : Quit.
                 If you are running on MacOS, then <ctrl> is your command key.
-
+                
                 Supported domains (case-sensitive):
                     %3$s
-
+                
                 Client example invocations:
                     # Client on single level, no output.
                     java -jar %1$s -c "java ExampleClient" -l "levels/example.lvl"
-
+                
                     # Client on single level, output to GUI on default screen.
                     java -jar %1$s -c "java ExampleClient" -l "levels/example.lvl" -g
-
+                
                     # Client on single level, output to GUI on screen 0.
                     java -jar %1$s -c "java ExampleClient" -l "levels/example.lvl" -g 0
-
+                
                     # Client on single level, output to log file.
                     java -jar %1$s -c "java ExampleClient" -l "levels/example.lvl" -o "logs/example.log"
-
+                
                     # Client on single level, output to GUI on default screen and to log file.
                     java -jar %1$s -c "java ExampleClient" -l "levels/example.lvl" -g -o "logs/example.log"
-
+                
                     # Client on a directory of levels, no output.
                     java -jar %1$s -c "java ExampleClient" -l "levels"
-
+                
                     # Client on a directory of levels, output to log archive.
                     java -jar %1$s -c "java ExampleClient" -l "levels" -o "logs.zip"
-
+                
+                    # Client on a directory of levels, output to log archive with additional encrypted archive.
+                    java -jar %1$s -c "java ExampleClient" -l "levels" -o "logs.zip" --encrypt "server.public"
+                
                 Replay example invocations:
                     # Replay a single log file, no output.
                     java -jar %1$s -r "logs/example.log"
-
+                
                     # Replay a single log file, output to GUI on default screen.
                     java -jar %1$s -r "logs/example.log" -g
-
+                
                     # Replay two log files, output to synchronized GUIs on screen 0 and 1.
                     # Start the GUIs paused, in fullscreen mode and with hidden interface elements to avoid spoilers.
                     # Play back actions at a speed of one action every 500 milliseconds.
