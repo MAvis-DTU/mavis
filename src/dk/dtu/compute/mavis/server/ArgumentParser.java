@@ -504,7 +504,14 @@ public class ArgumentParser
                 
                 Replay one or more log files, optionally output to synchronized GUIs:
                     java -jar %1$s -r <log-file-path> [<log-file-path> ...]
-                              %2$s [-g [<screen> ...] [-s <ms-per-action>] [-p] [-f] [-i]]""";
+                              %2$s [-g [<screen> ...] [-s <ms-per-action>] [-p] [-f] [-i]]
+                
+                Generate a public/private key pair for use with --encrypt and --decrypt:
+                    java -jar %1$s --keygen <key-pair-base-file-path>
+                
+                Decrypt an encrypted log file archive:
+                    java -jar %1$s --decrypt <private-key-path> <encrypted-log-file-path> <output-path>
+                """;
         var jarName = getJarName();
         var jarNameSpacePadding = " ".repeat(jarName.length());
         return String.format(shortHelp, jarName, jarNameSpacePadding);
@@ -593,9 +600,24 @@ public class ArgumentParser
                         Optional. Set the GUI tick rate in ticks per second. Each tick renders a new frame (if not paused).
                         By default the tick rate matches the lowest common denominator of the screens refresh rates.
                 
+                Generate a public/private key pair for use with --encrypt and --decrypt:
+                    java -jar %1$s --keygen <key-pair-base-file-path>
+                Where the arguments are as follows:
+                    <key-pair-base-file-path>: The base file path of the key files to generate. The file extensions
+                                               .public and .private will be appended to the base file name for each of
+                                               the two key files respectively.
+                
+                Decrypt an encrypted log file archive:
+                    java -jar %1$s --decrypt <private-key-path> <encrypted-log-file-path> <output-path>
+                Where the arguments are as follows:
+                    <private-key-path>: Path to a private key file to use for decryption (must correspond with the
+                                        public key used for encryption.
+                    <encrypted-log-file-path>: Path to an encrypted log file archive to be decrypted.
+                    <output-path>: Path the decrypted archive will be written to.
+                
                 Notes on the <screen> arguments:
                     Values for the <screen> arguments are integers in the range 0..(<num-screens> - 1).
-                    The server attemps to enumerate screens from left-to-right, breaking ties with top-to-bottom.
+                    The server attempts to enumerate screens from left-to-right, breaking ties with top-to-bottom.
                     The real underlying screen ordering is system-defined, and the server may fail at enumerating in the above order.
                     If no <screen> argument is given, then the 'default' screen is used, which is a system-defined screen.
                 
@@ -665,11 +687,18 @@ public class ArgumentParser
                     # Replay two log files, output to synchronized GUIs on screen 0 and 1.
                     # Start the GUIs paused, in fullscreen mode and with hidden interface elements to avoid spoilers.
                     # Play back actions at a speed of one action every 500 milliseconds.
-                    java -jar %1$s -r "logs/example1.log" "logs/example2.log" -g 0 1 -p -f -i -s 500""";
+                    java -jar %1$s -r "logs/example1.log" "logs/example2.log" -g 0 1 -p -f -i -s 500
+                
+                Generate a public/private key pair:
+                    # Generates ./server.public and ./server.private.
+                    java -jar %1$s --keygen "server"
+                
+                Decrypt an encrypted archive:
+                    java -jar %1$s --decrypt "server.private" "logs.zip.out" "logs.zip"
+                """;
         var jarName = getJarName();
         var jarNameSpacePadding = " ".repeat(jarName.length());
         var supportedDomains = String.join("\n    ", Domain.getSupportedDomains());
         return String.format(longHelp, jarName, jarNameSpacePadding, supportedDomains);
     }
 }
-
