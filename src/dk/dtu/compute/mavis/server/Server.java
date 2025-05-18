@@ -518,7 +518,7 @@ public class Server
                     Server.printInfo(String.format("Writing PNG file: %s", outputFilePath));
                     ImageIO.write(image, "png", outputFileStream);
                 } catch (Exception e) {
-                    Server.printError("Could not write png.");
+                    Server.printError(String.format("Could not write PNG file: %s", outputFilePath));
                     Server.printError(e.getMessage());
                     continue;
                 }
