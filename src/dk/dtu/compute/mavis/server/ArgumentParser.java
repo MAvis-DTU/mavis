@@ -53,6 +53,12 @@ public class ArgumentParser
 
     private DecryptCommand decryptCommand = null;
 
+    public record LevelPreviewCommand(Path levelDirectoryPath, Path outputDirectoryPath, int width, int height)
+    {
+    }
+
+    private LevelPreviewCommand levelPreviewCommand = null;
+
     /**
      * Input and Output modes.
      * <p>
@@ -153,6 +159,33 @@ public class ArgumentParser
         }
         if (Arrays.asList(args).contains("--decrypt")) {
             throw new ArgumentException("--decrypt should be the first argument if used.");
+        }
+
+        if (args[0].equals("--preview")) {
+            if (args.length != 5) {
+                throw new ArgumentException(
+                        "Expected level directory path, output directory path, width and height arguments after " +
+                        "--preview.");
+            }
+            var levelDirectoryPath = Path.of(args[1]);
+            var outputDirectoryPath = Path.of(args[2]);
+            var width = 0;
+            try {
+                width = Integer.parseInt(args[3]);
+            } catch (NumberFormatException e) {
+                throw new ArgumentException("Couldn't parse <width> as an integer.");
+            }
+            var height = 0;
+            try {
+                height = Integer.parseInt(args[4]);
+            } catch (NumberFormatException e) {
+                throw new ArgumentException("Couldn't parse <height> as an integer.");
+            }
+            this.levelPreviewCommand = new LevelPreviewCommand(levelDirectoryPath, outputDirectoryPath, width, height);
+            return;
+        }
+        if (Arrays.asList(args).contains("--preview")) {
+            throw new ArgumentException("--preview should be the first argument if used.");
         }
 
         int i = 0;
@@ -477,6 +510,11 @@ public class ArgumentParser
         return this.decryptCommand;
     }
 
+    public LevelPreviewCommand getLevelPreviewCommand()
+    {
+        return this.levelPreviewCommand;
+    }
+
     private static String getJarName()
     {
         try {
@@ -511,6 +549,9 @@ public class ArgumentParser
                 
                 Decrypt an encrypted log file archive:
                     java -jar %1$s --decrypt <private-key-path> <encrypted-log-file-path> <output-path>
+                
+                Generate initial-state preview PNGs for a directory of levels:
+                    java -jar %1$s --preview <level-directory-path> <output-directory-path> <width> <height>
                 """;
         var jarName = getJarName();
         var jarNameSpacePadding = " ".repeat(jarName.length());
@@ -615,6 +656,14 @@ public class ArgumentParser
                     <encrypted-log-file-path>: Path to an encrypted log file archive to be decrypted.
                     <output-path>: Path the decrypted archive will be written to.
                 
+                Generate initial-state preview PNGs for a directory of levels:
+                    java -jar %1$s --preview <level-directory-path> <output-directory-path> <width> <height>
+                Where the arguments are as follows.
+                    <level-directory-path>: The path to a directory containing .lvl files.
+                    <output-directory-path>: Determines where to put the generated PNGs. Each <name>.lvl file will
+                                             generate a corresponding <name>.png file in this directory.
+                    <width>/<height>: Determines the width and height of the generated PNGs in pixels.
+                
                 Notes on the <screen> arguments:
                     Values for the <screen> arguments are integers in the range 0..(<num-screens> - 1).
                     The server attempts to enumerate screens from left-to-right, breaking ties with top-to-bottom.
@@ -695,6 +744,9 @@ public class ArgumentParser
                 
                 Decrypt an encrypted archive:
                     java -jar %1$s --decrypt "server.private" "logs.zip.out" "logs.zip"
+                
+                Generate preview PNGs for a directory of levels:
+                    java -jar %1$s --preview "levels" "previews" 1200 1200
                 """;
         var jarName = getJarName();
         var jarNameSpacePadding = " ".repeat(jarName.length());
