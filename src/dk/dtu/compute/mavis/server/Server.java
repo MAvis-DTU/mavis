@@ -505,7 +505,8 @@ public class Server
                     continue;
                 }
 
-                try (var outputFileStream = Files.newOutputStream(outputFilePath, StandardOpenOption.CREATE_NEW)) {
+                try (var outputFileStream = new BufferedOutputStream(Files.newOutputStream(outputFilePath,
+                                                                                           StandardOpenOption.CREATE_NEW))) {
                     var image = new BufferedImage(levelPreviewCommand.width(),
                                                   levelPreviewCommand.height(),
                                                   BufferedImage.TYPE_INT_RGB);
