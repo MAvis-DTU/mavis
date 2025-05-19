@@ -27,7 +27,9 @@ import dk.dtu.compute.mavis.utils.TeeOutputStream;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -106,6 +108,12 @@ public class Server
             } catch (Exception e) {
                 Server.printError("Couldn't decrypt log archive: " + e.getMessage());
             }
+            return;
+        }
+
+        var levelPreviewCommand = arguments.getLevelPreviewCommand();
+        if (levelPreviewCommand != null) {
+            Server.runLevelPreviewCommand(levelPreviewCommand);
             return;
         }
 
@@ -274,7 +282,7 @@ public class Server
                         Server.printError(e.getMessage());
                         return;
                     }
-                    
+
                     logFileStream = new TeeOutputStream(logFileStream, encryptedLogFileStream);
                 }
 
@@ -445,6 +453,81 @@ public class Server
                                                                                    StandardOpenOption.CREATE_NEW))) {
             Server.printInfo("Writing decrypted archive to: " + decryptCommand.outputFilePath());
             cipherStream.transferTo(outputFileStream);
+        }
+    }
+
+    public static void runLevelPreviewCommand(ArgumentParser.LevelPreviewCommand levelPreviewCommand)
+    {
+        var levelFileFilter = new DirectoryStream.Filter<Path>()
+        {
+            @Override
+            public boolean accept(Path entry)
+            {
+                return Files.isReadable(entry) &&
+                       Files.isRegularFile(entry) &&
+                       entry.getFileName().toString().endsWith(".lvl") &&
+                       entry.getFileName().toString().length() > 4;
+            }
+        };
+
+        var outputDirectoryPath = levelPreviewCommand.outputDirectoryPath();
+        if (!Files.exists(outputDirectoryPath) || !Files.isDirectory(outputDirectoryPath)) {
+            Server.printError("The output directory path doesn't exist or isn't a directory (or has insufficient " +
+                              "permissions).");
+            return;
+        }
+
+        try (var levelDirectory = Files.newDirectoryStream(levelPreviewCommand.levelDirectoryPath(), levelFileFilter)) {
+            for (Path levelPath : levelDirectory) {
+                Server.printInfo(String.format("Generating preview for level file: %s", levelPath));
+
+                // Load domain.
+                Domain domain;
+                try {
+                    Server.printDebug("Loading domain.");
+                    domain = Domain.loadLevel(levelPath);
+                } catch (ParseException e) {
+                    Server.printError("Could not load domain, failed to parse level file.");
+                    Server.printError(e.getMessage());
+                    continue;
+                } catch (IOException e) {
+                    Server.printError("IOException while loading domain.");
+                    e.printStackTrace();
+                    continue;
+                }
+
+                var outputFilePath = outputDirectoryPath.resolve(levelPath.getFileName()
+                                                                          .toString()
+                                                                          .replace(".lvl", ".png"));
+                if (!Files.notExists(outputFilePath)) {
+                    Server.printWarning("Output file already exists (or has insufficient permissions), skipping: " +
+                                        outputFilePath);
+                    continue;
+                }
+
+                try (var outputFileStream = new BufferedOutputStream(Files.newOutputStream(outputFilePath,
+                                                                                           StandardOpenOption.CREATE_NEW))) {
+                    var image = new BufferedImage(levelPreviewCommand.width(),
+                                                  levelPreviewCommand.height(),
+                                                  BufferedImage.TYPE_INT_RGB);
+                    var graphics = image.createGraphics();
+                    domain.initializeGraphics();
+                    domain.renderDomainBackground(graphics, image.getWidth(), image.getHeight());
+                    domain.renderStateBackground(graphics, 0);
+                    domain.renderStateTransition(graphics, 0, 0.0);
+                    graphics.dispose();
+                    Server.printInfo(String.format("Writing PNG file: %s", outputFilePath));
+                    ImageIO.write(image, "png", outputFileStream);
+                } catch (Exception e) {
+                    Server.printError(String.format("Could not write PNG file: %s", outputFilePath));
+                    Server.printError(e.getMessage());
+                    continue;
+                }
+            }
+        } catch (IOException e) {
+            Server.printError("Could not open levels directory.");
+            Server.printError(e.getMessage());
+            return;
         }
     }
 
