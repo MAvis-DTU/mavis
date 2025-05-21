@@ -751,17 +751,14 @@ class StateSequence
                         levelReader.getLineNumber());
             }
 
-            if (line.length() > 0 && line.charAt(0) == '#') {
+            if (!line.isEmpty() && line.charAt(0) == '#') {
                 return line;
             }
 
-            String[] split = line.split(":");
-            if (split.length < 1) {
+            String[] split = line.split(":", 2);
+            if (split.length != 2) {
                 throw new ParseException("Invalid action line syntax - timestamp missing?",
                                          levelReader.getLineNumber());
-            }
-            if (split.length > 2) {
-                throw new ParseException("Invalid action line syntax - too many colons?", levelReader.getLineNumber());
             }
 
             // Parse action timestamp.
@@ -774,7 +771,7 @@ class StateSequence
 
             // Parse and execute joint action.
             String[] actionsStr = split[1].split("\\|");
-            String agentCallouts[] = new String[this.numAgents];
+            String[] agentCallouts = new String[this.numAgents];
             if (actionsStr.length != this.numAgents) {
                 throw new ParseException("Invalid number of agents in joint action.", levelReader.getLineNumber());
             }
