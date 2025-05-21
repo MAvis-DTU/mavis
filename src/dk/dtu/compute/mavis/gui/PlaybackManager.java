@@ -124,7 +124,8 @@ public class PlaybackManager
     {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+                 InstantiationException e) {
             Server.printWarning("Could not set system look and feel.");
             Server.printWarning(e.getMessage());
         }
@@ -157,7 +158,8 @@ public class PlaybackManager
 
         this.toolkit = Toolkit.getDefaultToolkit();
 
-        int tickRate = tickRateOverride != null ? tickRateOverride :
+        int tickRate = tickRateOverride != null ?
+                       tickRateOverride :
                        PlaybackManager.getMinimumSupportedRefreshRate(gcs);
         Server.printDebug("GUI tick rate: " + tickRate + " Hz.");
         // Note that the actual tick rate may/will be a bit higher due to limited resolution of the tick timer.
