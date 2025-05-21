@@ -124,7 +124,8 @@ public class PlaybackManager
     {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+                 InstantiationException e) {
             Server.printWarning("Could not set system look and feel.");
             Server.printWarning(e.getMessage());
         }
@@ -157,7 +158,8 @@ public class PlaybackManager
 
         this.toolkit = Toolkit.getDefaultToolkit();
 
-        int tickRate = tickRateOverride != null ? tickRateOverride :
+        int tickRate = tickRateOverride != null ?
+                       tickRateOverride :
                        PlaybackManager.getMinimumSupportedRefreshRate(gcs);
         Server.printDebug("GUI tick rate: " + tickRate + " Hz.");
         // Note that the actual tick rate may/will be a bit higher due to limited resolution of the tick timer.
@@ -465,10 +467,10 @@ public class PlaybackManager
             // Cap to the maximum number of states for this particular domain.
             double cappedStateInterpolation = Math.min(this.currentStateInterpolation, this.numStates[i]);
             String shownState = this.hideInterface ?
-                                String.format(Locale.ROOT, "%.3f", cappedStateInterpolation) :
+                                String.format(Locale.ROOT, "%d", (int) cappedStateInterpolation) :
                                 String.format(Locale.ROOT,
-                                              "%.3f of %d",
-                                              cappedStateInterpolation,
+                                              "%d of %d",
+                                              (int) cappedStateInterpolation,
                                               (int) this.numStates[i]);
             this.frames[i].setShownState(shownState);
             String shownStateTime = this.hideInterface ?
