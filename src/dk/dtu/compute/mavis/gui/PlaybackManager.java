@@ -467,10 +467,10 @@ public class PlaybackManager
             // Cap to the maximum number of states for this particular domain.
             double cappedStateInterpolation = Math.min(this.currentStateInterpolation, this.numStates[i]);
             String shownState = this.hideInterface ?
-                                String.format(Locale.ROOT, "%.3f", cappedStateInterpolation) :
+                                String.format(Locale.ROOT, "%d", (int) cappedStateInterpolation) :
                                 String.format(Locale.ROOT,
-                                              "%.3f of %d",
-                                              cappedStateInterpolation,
+                                              "%d of %d",
+                                              (int) cappedStateInterpolation,
                                               (int) this.numStates[i]);
             this.frames[i].setShownState(shownState);
             String shownStateTime = this.hideInterface ?
