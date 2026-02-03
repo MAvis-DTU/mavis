@@ -127,7 +127,7 @@ public class ArgumentParser
             return;
         }
         for (String s : args) {
-            if (s.equals("-h")) {
+            if (s.equals("-h") || s.equals("--help")) {
                 this.printHelp = PrintHelp.LONG;
                 return;
             }
